@@ -1,8 +1,6 @@
 <template>
   <div class="card mt-3">
-    <div class="card-header">
-      {{ challenge.camoName }}
-    </div>
+    <div class="card-header">{{ challenge.camoName }}</div>
     <div class="card-body">
       <div clas="container">
         <div class="row">
@@ -22,12 +20,7 @@
         <div class="row justify-content-start">
           <div class="col-1" style="text-align: left; min-width: 175px">
             <label for="progressInput">Current Progress:</label>
-            <input
-              id="progressInput"
-              class="form-control"
-              type="number"
-              v-model="currentProgress"
-            />
+            <input id="progressInput" class="form-control" type="number" v-model="currentProgress" />
           </div>
           <div class="col-1 align-self-end">
             <button type="button" class="btn btn-primary" @click="saveProgress">Save</button>
@@ -64,7 +57,7 @@ export default {
     },
     getProgressBarClass(challenge) {
       let percentage = this.getProgressPercentage(challenge)
-      
+
       if (percentage == 100) {
         return 'bg-success'
       }
@@ -80,7 +73,7 @@ export default {
 
     },
     saveProgress() {
-      this.$emit('progress-saved', {challengeId: this.challenge.id, progress: this.currentProgress})
+      this.$emit('progress-saved', { challengeId: this.challenge.id, progress: this.currentProgress })
     }
   },
   filters: {
@@ -92,8 +85,8 @@ export default {
 
 </script>
 <style scoped>
-  .card-header {
-    background-color: #4d7896;
-    color: #FFFAFA;
-  }
+.card-header {
+  background-color: #4d7896;
+  color: #fffafa;
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row row wrap">
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3" v-for="weapon in weapons" v-bind:key="weapon.id">
+      <div class="col-xs-12 col-md-6 col-lg-4 col-xxl-3" v-for="weapon in weapons" :key="weapon.id">
         <WeaponCard v-bind:weapon="weapon" @weapon-change="handleWeaponChange" />
       </div>
     </div>
