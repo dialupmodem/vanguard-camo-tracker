@@ -2,7 +2,7 @@
   <div class="h-100">
     <div class="container-fluid h-100">
       <div class="row h-100">
-        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 nav-container">
+        <div class="col-xs-12 col-md-2 col-lg-2 nav-container">
           <CategoryNav
             :weapon-categories="weaponCategories"
             :active-category-id="activeWeaponCategoryId"
@@ -129,10 +129,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .nav-container {
   background-color: #36454F;
   max-width: 250px;
   min-width: 125px;
+
+  @media (max-width: map-get($grid-breakpoints, lg)) {
+    min-width: 100%;
+  }
 }
 </style>

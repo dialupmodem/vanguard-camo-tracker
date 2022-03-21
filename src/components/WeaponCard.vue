@@ -22,12 +22,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .card-header {
     background-color: #4d7896;
     color: #FFFAFA;
   }
   .card:hover {
     box-shadow: 2px 2px 2px 1px #36454F;
+  }
+  img {
+    max-width: 100%;
+    
+    @media screen and (max-width: map-get($grid-breakpoints, lg)) {
+      max-width: 80%;
+    }
   }
 </style>
