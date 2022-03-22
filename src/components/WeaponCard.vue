@@ -11,10 +11,10 @@
         <div class="row progress-row flex-column justify-content-center align-content-center">
           <div class="col-4 w-100">
             <div class="progress">
-              <div class="progress-bar"></div>
+              <div class="progress-bar" :class="getProgressBarClass()" :style="getProgressBarStyle()"></div>
             </div>
           </div>
-          <div class="col-4 w-100 mt-3">50% Complete</div>
+          <div class="col-4 w-100 mt-3">{{ weapon.percentCompleted }}% Complete</div>
         </div>
       </div>
     </div>
@@ -25,12 +25,37 @@
 export default {
   name: 'WeaponCard',
   props: {
-    weapon: Object
+    weapon: {
+      type: Object,
+      required: true
+    }
   },
   methods: {
-    changeSelection(weaponId) {
-      this.$emit('weapon-change', weaponId)
-    }
+    changeSelection() {
+      this.$emit('weapon-change', this.weapon.id)
+    },
+    getProgressBarStyle() {
+      let styleObject = {
+        width: `${this.weapon.percentCompleted}%`
+      }
+
+      return styleObject
+    },
+     getProgressBarClass() {
+      let percentage = this.weapon.percentCompleted
+
+      if (percentage == 100) {
+        return 'bg-success'
+      }
+      else if (percentage > 50) {
+        return 'bg-warning'
+      }
+      else {
+        return 'bg-danger'
+      }
+
+    },
+
   }
 }
 </script>
