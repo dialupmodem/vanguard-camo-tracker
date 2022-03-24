@@ -11,7 +11,11 @@
         <div class="row progress-row flex-column justify-content-center align-content-center">
           <div class="col-4 w-100">
             <div class="progress">
-              <div class="progress-bar" :class="getProgressBarClass()" :style="getProgressBarStyle()"></div>
+              <div
+                class="progress-bar"
+                :class="getProgressBarClass()"
+                :style="getProgressBarStyle()"
+              ></div>
             </div>
           </div>
           <div class="col-4 w-100 mt-3">{{ weapon.percentCompleted }}% Complete</div>
@@ -41,7 +45,7 @@ export default {
 
       return styleObject
     },
-     getProgressBarClass() {
+    getProgressBarClass() {
       let percentage = this.weapon.percentCompleted
 
       if (percentage == 100) {
@@ -63,7 +67,7 @@ export default {
 <style lang="scss" scoped>
 .card {
   cursor: pointer;
-  transition: transform .3s;
+  transition: transform 0.3s;
 
   @media screen and (max-width: map-get($grid-breakpoints, md)) {
     max-width: 300px;

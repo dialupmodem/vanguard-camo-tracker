@@ -93,7 +93,6 @@ hr {
   }
 }
 
-
 .collapse {
   @media screen and (min-width: map-get($grid-breakpoints, lg)) {
     display: block !important;

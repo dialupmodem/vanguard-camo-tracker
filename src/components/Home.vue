@@ -19,10 +19,7 @@
             </div>
             <div class="row">
               <div class="col" v-if="!isBrowsingWeapon">
-                <WeaponList
-                  :weapons="activeWeaponList"
-                  @weapon-change="handleWeaponChange"
-                />
+                <WeaponList :weapons="activeWeaponList" @weapon-change="handleWeaponChange" />
               </div>
               <div class="col" v-else>
                 <WeaponChallengeList
@@ -78,29 +75,29 @@ export default {
     },
     handleCategoryChange(weaponCategoryId) {
       API.getWeaponsInCategory(weaponCategoryId)
-      .then(response => {
-        this.isBrowsingWeapon = false
-        this.activeWeaponList = response.data
-        this.activeWeaponCategoryId = weaponCategoryId
-      })
+        .then(response => {
+          this.isBrowsingWeapon = false
+          this.activeWeaponList = response.data
+          this.activeWeaponCategoryId = weaponCategoryId
+        })
     },
     handleWeaponChange(weaponId) {
       this.isBrowsingWeapon = true
       API.getWeapon(weaponId)
-      .then((response) => {
-        this.activeWeapon = response.data
-        this.activeWeaponName = this.activeWeapon.name
+        .then((response) => {
+          this.activeWeapon = response.data
+          this.activeWeaponName = this.activeWeapon.name
 
-        API.getWeaponChallenges(weaponId)
-        .then(response => (this.activeWeaponChallenges = response.data))
-      })
+          API.getWeaponChallenges(weaponId)
+            .then(response => (this.activeWeaponChallenges = response.data))
+        })
     },
     handleProgressSaved(savedChallenge) {
       console.log(savedChallenge)
-        API.updateChallengeProgress(savedChallenge.challengeId, savedChallenge.progress)
+      API.updateChallengeProgress(savedChallenge.challengeId, savedChallenge.progress)
         .then(() => {
           API.getWeaponChallenges(this.activeWeapon.id)
-          .then(response => (this.activeWeaponChallenges = response.data))
+            .then(response => (this.activeWeaponChallenges = response.data))
         })
     }
   },
