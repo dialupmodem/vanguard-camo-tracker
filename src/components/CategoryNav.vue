@@ -6,12 +6,13 @@
         class="menu-toggle"
         data-bs-toggle="collapse"
         data-bs-target="#navCollapse"
-      >toggle</button>
+      >
+        <i class="bi-list"></i>
+      </button>
     </div>
     <h4 class="mt-3 header">Vanguard Camo Tracker</h4>
     <hr />
     <div class="nav-container pb-4">
-      
       <div id="navCollapse" class="collapse mt-4">
         <ul class="nav flex-column">
           <li class="nav-item" :key="weaponCategory.id" v-for="weaponCategory in weaponCategories">
@@ -81,6 +82,17 @@ hr {
     display: block;
   }
 }
+.menu-toggle {
+  background-color: $nav-bg;
+  color: #fffafa;
+  border-style: solid;
+  border-width: 1px;
+
+  :active {
+    color: #909090;
+  }
+}
+
 
 .collapse {
   @media screen and (min-width: map-get($grid-breakpoints, lg)) {
