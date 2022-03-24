@@ -10,26 +10,21 @@
           />
         </div>
         <div class="col pb-5">
-          <div class="container">
-            <div class="row">
-              <div class="col mt-3" v-if="!isBrowsingWeapon">
-                <h4>{{ activeCategoryName }}</h4>
-                <hr />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col" v-if="!isBrowsingWeapon">
-                <WeaponList :weapons="activeWeaponList" @weapon-change="handleWeaponChange" />
-              </div>
-              <div class="col" v-else>
-                <WeaponChallengeList
-                  :weaponName="activeWeaponName"
-                  :weaponChallenges="activeWeaponChallenges"
-                  @progress-saved="handleProgressSaved"
-                />
-              </div>
-            </div>
-          </div>
+          <transition name="fade" mode="out-in">
+            <WeaponList
+              :weapons="activeWeaponList"
+              :categoryName="activeCategoryName"
+              :key="activeCategoryName"
+              @weapon-change="handleWeaponChange"
+              v-if="!isBrowsingWeapon"
+            />
+            <WeaponChallengeList
+              :weapon-name="activeWeaponName"
+              :weapon-challenges="activeWeaponChallenges"
+              @progress-saved="handleProgressSaved"
+              v-else
+            />
+          </transition>
         </div>
       </div>
     </div>
@@ -76,24 +71,25 @@ export default {
     handleCategoryChange(weaponCategoryId) {
       API.getWeaponsInCategory(weaponCategoryId)
         .then(response => {
-          this.isBrowsingWeapon = false
           this.activeWeaponList = response.data
           this.activeWeaponCategoryId = weaponCategoryId
+          this.isBrowsingWeapon = false
         })
     },
     handleWeaponChange(weaponId) {
-      this.isBrowsingWeapon = true
       API.getWeapon(weaponId)
         .then((response) => {
           this.activeWeapon = response.data
           this.activeWeaponName = this.activeWeapon.name
 
           API.getWeaponChallenges(weaponId)
-            .then(response => (this.activeWeaponChallenges = response.data))
+            .then(response => {
+              this.activeWeaponChallenges = response.data
+              this.isBrowsingWeapon = true
+            })
         })
     },
     handleProgressSaved(savedChallenge) {
-      console.log(savedChallenge)
       API.updateChallengeProgress(savedChallenge.challengeId, savedChallenge.progress)
         .then(() => {
           API.getWeaponChallenges(this.activeWeapon.id)
@@ -135,5 +131,14 @@ export default {
   @media (max-width: map-get($grid-breakpoints, lg)) {
     min-width: 100%;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
