@@ -15,7 +15,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -23,10 +23,22 @@ export default {
   text-align: center;
   color: #2c3e50;
   height: 100%;
-  /* margin-top: 60px; */
 }
-html, body {
+
+::-webkit-scrollbar {
+  @media screen and (min-width: map-get($grid-breakpoints, lg)) {
+    display: none;
+  }
+}
+
+html,
+body {
   height: 100%;
-  background-color: #DEDEDE !important;
+  background-color: #dedede !important;
+
+  @media screen and (min-width: map-get($grid-breakpoints, lg)) {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 </style>
