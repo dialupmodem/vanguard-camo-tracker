@@ -7,6 +7,7 @@
             :weapon-categories="weaponCategories"
             :active-category-id="activeWeaponCategoryId"
             @category-change="handleCategoryChange"
+            v-if="weaponCategories != null"
           />
         </div>
         <div class="col pb-5">
@@ -97,7 +98,7 @@ export default {
         })
     }
   },
-  mounted() {
+  created() {
     API.getWeaponCategories()
       .then(response => {
         this.weaponCategories = response.data
