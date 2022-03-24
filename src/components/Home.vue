@@ -131,7 +131,7 @@ export default {
 
 <style lang="scss" scoped>
 .nav-container {
-  background-color: #36454F;
+  background-color: $nav-bg;
   max-width: 250px;
   min-width: 125px;
 
