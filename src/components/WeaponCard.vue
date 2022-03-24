@@ -63,10 +63,16 @@ export default {
 <style lang="scss" scoped>
 .card {
   cursor: pointer;
+  transition: transform .3s;
 
   @media screen and (max-width: map-get($grid-breakpoints, md)) {
     max-width: 300px;
   }
+}
+
+.card:hover {
+  transform: scale(1.08);
+  z-index: 999;
 }
 .card-header {
   background-color: #4d7896;
@@ -80,9 +86,6 @@ export default {
   @media screen and (max-width: map-get($grid-breakpoints, md)) {
     max-width: 285px;
   }
-}
-.card:hover {
-  box-shadow: 2px 2px 2px 1px #36454f;
 }
 img {
   max-width: 100%;
