@@ -39,7 +39,7 @@
               <div class="col">
                 <ul class="nav flex-column flex-nowrap">
                   <li class="nav-item" :key="weapon.id" v-for="weapon in weaponCategory.weapons">
-                    <a class="nav-link">{{ weapon.name }}</a>
+                    <a class="nav-link" href="#" @click="changeWeapon(weapon.id)">{{ weapon.name }}</a>
                   </li>
                 </ul>
               </div>
@@ -66,6 +66,9 @@ export default {
   methods: {
     changeCategory(categoryId) {
       this.$emit('category-change', categoryId)
+    },
+    changeWeapon(weaponId) {
+      this.$emit('weapon-change', weaponId)
     },
     isActiveCategory(categoryId) {
       return this.activeCategoryId == categoryId

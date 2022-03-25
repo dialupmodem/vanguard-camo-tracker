@@ -7,6 +7,7 @@
             :weapon-categories="weaponCategories"
             :active-category-id="activeWeaponCategoryId"
             @category-change="handleCategoryChange"
+            @weapon-change="handleWeaponChange"
             v-if="weaponCategories != null"
           />
         </div>
