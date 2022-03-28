@@ -32,7 +32,7 @@
               <div class="col-2 align-self-center justify-self-end">
                 <button
                   type="button"
-                  class="category-accordion"
+                  class="category-collapse-button"
                   data-bs-toggle="collapse"
                   :data-bs-target="`#categoryCollapse-${weaponCategory.id}`"
                   :style="getAccordionButtonStyle(weaponCategory.id)"
@@ -44,46 +44,10 @@
             </div>
             <div class="row">
               <div class="col">
-                <div class="collapse" :id="`categoryCollapse-${weaponCategory.id}`">
-                  <ul class="nav flex-column flex-nowrap">
-                    <li class="nav-item" :key="weapon.id" v-for="weapon in weaponCategory.weapons">
-                      <a
-                        class="nav-link"
-                        href="#"
-                        @click="changeWeapon(weapon.id)"
-                      >{{ weapon.name }}</a>
-                    </li>
-                  </ul>
-                </div>
+                <WeaponNav :weaponCategory="weaponCategory" @change-weapon="handleWeaponChange"></WeaponNav>
+      
               </div>
             </div>
-            <!-- <div class="row">
-              <div class="col">
-                <div class="accordion-container">
-                  <transition name="expand">
-                    <div
-                      class="accordion-content"
-                      :key="`${weaponCategory.id}-accordion`"
-                      v-if="isCategoryAccordionExpanded(weaponCategory.id)"
-                    >
-                      <ul class="nav flex-column flex-nowrap">
-                        <li
-                          class="nav-item"
-                          :key="weapon.id"
-                          v-for="weapon in weaponCategory.weapons"
-                        >
-                          <a
-                            class="nav-link"
-                            href="#"
-                            @click="changeWeapon(weapon.id)"
-                          >{{ weapon.name }}</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </transition>
-                </div>
-              </div>
-            </div>-->
           </div>
         </li>
       </ul>
@@ -92,8 +56,14 @@
 </template>
 
 <script>
+
+import WeaponNav from './WeaponNav.vue'
+
 export default {
-  name: 'CategoryNav',
+  name: "CategoryNav",
+  components: {
+    WeaponNav
+  },
   props: {
     weaponCategories: Array,
     activeCategoryId: Number
@@ -101,60 +71,54 @@ export default {
   data() {
     return {
       categoryAccordions: []
-    }
+    };
   },
   methods: {
     changeCategory(categoryId) {
-      this.$emit('category-change', categoryId)
+      this.$emit("category-change", categoryId);
     },
-    changeWeapon(weaponId) {
-      this.$emit('weapon-change', weaponId)
+    handleWeaponChange(weaponId) {
+      this.$emit("weapon-change", weaponId);
     },
     isActiveCategory(categoryId) {
-      return this.activeCategoryId == categoryId
+      return this.activeCategoryId == categoryId;
     },
     toggleCategoryAccordion(categoryId) {
-      let categoryAccordion = this.categoryAccordions.find(c => c.id == categoryId)
+      let categoryAccordion = this.categoryAccordions.find(c => c.id == categoryId);
       if (!categoryAccordion) {
-        return
+        return;
       }
-      categoryAccordion.expanded = !categoryAccordion.expanded
+      categoryAccordion.expanded = !categoryAccordion.expanded;
     },
     getAccordionIconClass(categoryId) {
-      let categoryAccordion = this.categoryAccordions.find(c => c.id == categoryId)
+      let categoryAccordion = this.categoryAccordions.find(c => c.id == categoryId);
       if (!categoryAccordion) {
-        return
+        return;
       }
-
       //let iconClass = categoryAccordion.expanded ? 'bi-chevron-down' : 'bi-chevron-right'
-      let iconClass = 'bi-chevron-right'
-      return iconClass
+      let iconClass = "bi-chevron-right";
+      return iconClass;
     },
     getAccordionButtonStyle(categoryId) {
-      let isCategoryExpanded = this.isCategoryAccordionExpanded(categoryId)
-
+      let isCategoryExpanded = this.isCategoryAccordionExpanded(categoryId);
       let styleObject = {
         transform: isCategoryExpanded ? "rotate(90deg)" : "rotate(0deg)"
-      }
-
-      return styleObject
+      };
+      return styleObject;
     },
     getAccordionContentStyle(categoryId) {
-      let category = this.weaponCategories.find(c => c.id == categoryId)
-
+      let category = this.weaponCategories.find(c => c.id == categoryId);
       let styleObject = {
         maxHeight: `${40 * category.weapons.length}px`
-      }
-
-      return styleObject
+      };
+      return styleObject;
     },
     isCategoryAccordionExpanded(categoryId) {
-      let categoryAccordion = this.categoryAccordions.find(c => c.id == categoryId)
+      let categoryAccordion = this.categoryAccordions.find(c => c.id == categoryId);
       if (!categoryAccordion) {
-        return false
+        return false;
       }
-
-      return categoryAccordion.expanded
+      return categoryAccordion.expanded;
     }
   },
   created() {
@@ -165,8 +129,8 @@ export default {
       this.categoryAccordions.push({
         id: category.id,
         expanded: false
-      })
-    })
+      });
+    });
   }
 }
 </script>
@@ -187,7 +151,7 @@ export default {
 .active {
   color: #909090;
 }
-.category-accordion {
+.category-collapse-button {
   background-color: transparent;
   border: none;
   color: #fffafa;
@@ -224,25 +188,5 @@ hr {
   }
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: max-height 0.5s;
-}
-.fade-enter,
-.fade-leave-to {
-  max-height: 100%;
-}
-.accordion-container {
-  overflow: hidden;
-}
-.accordion-content {
-}
-.expand-enter-active,
-.expand-leave-active {
-  transition: height 0.5s;
-}
-.expand-enter,
-.expand-leave-to {
-  max-height: 0;
-}
+
 </style>
