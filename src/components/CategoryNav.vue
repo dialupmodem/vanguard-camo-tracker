@@ -12,44 +12,46 @@
     </div>
     <h4 class="mt-3 header">Vanguard Camo Tracker</h4>
     <hr />
-    <div class="nav-container pb-4">
-      <ul class="nav flex-column flex-nowrap">
-        <li class="nav-item" :key="weaponCategory.id" v-for="weaponCategory in weaponCategories">
-          <div class="container-fluid w-100">
-            <div class="row flex-nowrap">
-              <div class="col-10 p-0 align-self-center">
-                <button
-                  type="button"
-                  class="nav-link pe-0 ps-0 m-0"
-                  :class="{ active: isActiveCategory(weaponCategory.id) }"
-                  @click="changeCategory(weaponCategory.id)"
-                >
-                  {{
-                    weaponCategory.name
-                  }}
-                </button>
+    <div id="navCollapse" class="collapse menu-collapse">
+      <div class="nav-container pb-4">
+        <ul class="nav flex-column flex-nowrap">
+          <li class="nav-item" :key="weaponCategory.id" v-for="weaponCategory in weaponCategories">
+            <div class="container-fluid w-100">
+              <div class="row flex-nowrap justify-content-center">
+                <div class="col-4 col-lg-10 p-0 align-self-center">
+                  <button
+                    type="button"
+                    class="nav-link pe-0 ps-0 m-0"
+                    :class="{ active: isActiveCategory(weaponCategory.id) }"
+                    @click="changeCategory(weaponCategory.id)"
+                  >
+                    {{
+                      weaponCategory.name
+                    }}
+                  </button>
+                </div>
+                <div class="col-2 align-self-center">
+                  <button
+                    type="button"
+                    class="category-collapse-button"
+                    data-bs-toggle="collapse"
+                    :data-bs-target="`#categoryCollapse-${weaponCategory.id}`"
+                    :style="getCollapseButtonStyle(weaponCategory.id)"
+                    @click="toggleCategoryCollapse(weaponCategory.id)"
+                  >
+                    <i class="bi-chevron-right"></i>
+                  </button>
+                </div>
               </div>
-              <div class="col-2 align-self-center justify-self-end">
-                <button
-                  type="button"
-                  class="category-collapse-button"
-                  data-bs-toggle="collapse"
-                  :data-bs-target="`#categoryCollapse-${weaponCategory.id}`"
-                  :style="getCollapseButtonStyle(weaponCategory.id)"
-                  @click="toggleCategoryCollapse(weaponCategory.id)"
-                >
-                  <i class="bi-chevron-right"></i>
-                </button>
+              <div class="row">
+                <div class="col">
+                  <WeaponNav :weaponCategory="weaponCategory" @change-weapon="handleWeaponChange"></WeaponNav>
+                </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col">
-                <WeaponNav :weaponCategory="weaponCategory" @change-weapon="handleWeaponChange"></WeaponNav>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -161,6 +163,11 @@ hr {
 
   :active {
     color: #909090;
+  }
+}
+.menu-collapse {
+  @media screen and (min-width: map-get($grid-breakpoints, lg)) {
+    display: block !important;
   }
 }
 </style>
