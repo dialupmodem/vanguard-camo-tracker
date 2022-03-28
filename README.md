@@ -1,4 +1,6 @@
 # vanguard-camo-tracker
+WIP, more to come soon
+
 
 ## Project setup
 ```
