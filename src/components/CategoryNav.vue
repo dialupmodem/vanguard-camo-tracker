@@ -35,17 +35,16 @@
                   class="category-collapse-button"
                   data-bs-toggle="collapse"
                   :data-bs-target="`#categoryCollapse-${weaponCategory.id}`"
-                  :style="getAccordionButtonStyle(weaponCategory.id)"
-                  @click="toggleCategoryAccordion(weaponCategory.id)"
+                  :style="getCollapseButtonStyle(weaponCategory.id)"
+                  @click="toggleCategoryCollapse(weaponCategory.id)"
                 >
-                  <i :class="getAccordionIconClass(weaponCategory.id)"></i>
+                  <i class="bi-chevron-right"></i>
                 </button>
               </div>
             </div>
             <div class="row">
               <div class="col">
                 <WeaponNav :weaponCategory="weaponCategory" @change-weapon="handleWeaponChange"></WeaponNav>
-      
               </div>
             </div>
           </div>
@@ -58,6 +57,7 @@
 <script>
 
 import WeaponNav from './WeaponNav.vue'
+import CategoryCollapses from '@/categories/CategoryCollapses.js'
 
 export default {
   name: "CategoryNav",
@@ -70,7 +70,7 @@ export default {
   },
   data() {
     return {
-      categoryAccordions: []
+      categoryCollapses: new CategoryCollapses()
     };
   },
   methods: {
@@ -83,52 +83,28 @@ export default {
     isActiveCategory(categoryId) {
       return this.activeCategoryId == categoryId;
     },
-    toggleCategoryAccordion(categoryId) {
-      let categoryAccordion = this.categoryAccordions.find(c => c.id == categoryId);
-      if (!categoryAccordion) {
-        return;
-      }
-      categoryAccordion.expanded = !categoryAccordion.expanded;
+    getCategoryCollapse(categoryId) {
+      return this.categoryCollapses.GetCollapse(categoryId)
     },
-    getAccordionIconClass(categoryId) {
-      let categoryAccordion = this.categoryAccordions.find(c => c.id == categoryId);
-      if (!categoryAccordion) {
-        return;
-      }
-      //let iconClass = categoryAccordion.expanded ? 'bi-chevron-down' : 'bi-chevron-right'
-      let iconClass = "bi-chevron-right";
-      return iconClass;
+    toggleCategoryCollapse(categoryId) {
+      this.categoryCollapses.ToggleCollapse(categoryId)
     },
-    getAccordionButtonStyle(categoryId) {
-      let isCategoryExpanded = this.isCategoryAccordionExpanded(categoryId);
-      let styleObject = {
-        transform: isCategoryExpanded ? "rotate(90deg)" : "rotate(0deg)"
-      };
-      return styleObject;
+    getCollapseButtonStyle(categoryId) {
+      return this.categoryCollapses.GetButtonStyle(categoryId)
     },
-    getAccordionContentStyle(categoryId) {
-      let category = this.weaponCategories.find(c => c.id == categoryId);
-      let styleObject = {
-        maxHeight: `${40 * category.weapons.length}px`
-      };
-      return styleObject;
-    },
-    isCategoryAccordionExpanded(categoryId) {
-      let categoryAccordion = this.categoryAccordions.find(c => c.id == categoryId);
-      if (!categoryAccordion) {
-        return false;
-      }
-      return categoryAccordion.expanded;
+    isCategoryCollapsed(categoryId) {
+      return this.categoryCollapses.IsCollapsed(categoryId)
     }
   },
   created() {
     if (this.weaponCategories == null) {
       return;
     }
+
     this.weaponCategories.forEach((category) => {
-      this.categoryAccordions.push({
+      this.categoryCollapses.collapses.push({
         id: category.id,
-        expanded: false
+        collapsed: true
       });
     });
   }
@@ -187,6 +163,4 @@ hr {
     color: #909090;
   }
 }
-
-
 </style>
