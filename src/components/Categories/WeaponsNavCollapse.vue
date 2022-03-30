@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'CategoryWeaponsNav',
+  name: 'WeaponsNavCollapse',
   props: {
     weapons: {
       type: Array,

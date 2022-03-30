@@ -3,7 +3,7 @@
     <div class="container-fluid h-100">
       <div class="row h-100">
         <div class="col-xs-12 col-md-2 col-lg-2 nav-container">
-          <CategoryNav
+          <Nav
             :weaponCategories="categories"
             :active-category-id="selectedCategoryId"
             @category-change="handleCategoryChange"
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import CategoryNav from './Categories/CategoryNav.vue'
+import Nav from './Categories/Nav.vue'
 import WeaponList from './WeaponList.vue'
 import WeaponChallengeList from './WeaponChallengeList.vue'
 import API from '/src/api/api.js'
@@ -41,7 +41,7 @@ import API from '/src/api/api.js'
 export default {
   name: 'Home',
   components: {
-    CategoryNav,
+    Nav,
     WeaponList,
     WeaponChallengeList
   },
@@ -76,7 +76,6 @@ export default {
     handleCategoryChange(weaponCategoryId) {
       this.selectCategory(weaponCategoryId)
 
-      console.log(weaponCategoryId)
       API.getWeaponsInCategory(this.selectedCategoryId)
         .then(response => {
           this.activeWeaponList = response.data
@@ -84,6 +83,7 @@ export default {
         })
     },
     handleWeaponChange(weaponId) {
+      console.log(weaponId)
       API.getWeapon(weaponId)
         .then((response) => {
           this.activeWeapon = response.data

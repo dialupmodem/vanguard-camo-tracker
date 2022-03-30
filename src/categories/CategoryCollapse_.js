@@ -1,4 +1,4 @@
-export default class CategoryCollapse {
+export default class CategoryCollapse_ {
   constructor(weaponCategory) {
     this.categoryId = weaponCategory.id
     this.categoryName = weaponCategory.name

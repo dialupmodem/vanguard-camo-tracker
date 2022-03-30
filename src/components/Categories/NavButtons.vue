@@ -15,7 +15,7 @@
         data-bs-toggle="collapse"
         :data-bs-target="collapseIdSelector"
         :style="collapseButtonStyle"
-        @click="toggleCollapse(categoryCollapse)"
+        @click="toggleCollapse"
       >
         <i class="bi-chevron-right"></i>
       </button>
@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: 'CategoryNavItem',
+  name: 'NavButtons',
   props: {
     categoryCollapse: {
       type: Object,
@@ -38,10 +38,10 @@ export default {
   },
   methods: {
     changeCategory() {
-      this.$emit('category-change', this.categoryId)
+      this.$emit('category-change')
     },
     toggleCollapse() {
-      this.$emit('toggle-collapse', this.categoryCollapse)
+      this.$emit('toggle-collapse')
     }
   },
   computed: {

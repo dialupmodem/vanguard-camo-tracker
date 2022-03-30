@@ -16,25 +16,14 @@
     <div id="navCollapse" class="collapse menu-collapse">
       <div class="nav-container pb-4">
         <ul class="nav flex-column flex-nowrap">
-          <li
-            class="nav-item"
+          <NavItem
+            :categoryCollapse="categoryCollapse"
             :key="categoryCollapse.categoryId"
+            @category-change="handleCategoryChange"
+            @weapon-change="handleWeaponChange"
+            @toggle-collapse="handleToggleCollapse"
             v-for="categoryCollapse in categoryCollapses"
-          >
-            <div class="container-fluid w-100">
-              <CategoryNavItem
-                :categoryCollapse="categoryCollapse"
-                :isActive="false"
-                @category-change="handleCategoryChange"
-                @toggle-collapse="handleToggleCollapse"
-              ></CategoryNavItem>
-              <CategoryWeaponsNav
-                :weapons="categoryCollapse.weapons"
-                :categoryId="categoryCollapse.categoryId"
-                @change-weapon="handleWeaponChange"
-              ></CategoryWeaponsNav>
-            </div>
-          </li>
+          />
         </ul>
       </div>
     </div>
@@ -43,15 +32,13 @@
 
 <script>
 
-import CategoryNavItem from './CategoryNavItem.vue'
-import CategoryWeaponsNav from './CategoryWeaponsNav.vue'
-import CategoryCollapse from '@/categories/CategoryCollapse.js'
+import NavItem from './NavItem.vue'
+import CategoryCollapse_ from '@/categories/CategoryCollapse_.js'
 
 export default {
-  name: "CategoryNav",
+  name: "Nav",
   components: {
-    CategoryNavItem,
-    CategoryWeaponsNav
+    NavItem
   },
   props: {
     weaponCategories: {
@@ -100,7 +87,7 @@ export default {
     }
 
     this.weaponCategories.forEach((weaponCategory) => {
-      this.categoryCollapses.push(new CategoryCollapse(weaponCategory))
+      this.categoryCollapses.push(new CategoryCollapse_(weaponCategory))
     });
   }
 }
