@@ -4,19 +4,18 @@
       <div class="row h-100">
         <div class="col-xs-12 col-md-2 col-lg-2 nav-container">
           <CategoryNav
-            :weapon-categories="weaponCategories"
-            :active-category-id="activeWeaponCategoryId"
+            :weaponCategories="categories"
+            :active-category-id="selectedCategoryId"
             @category-change="handleCategoryChange"
             @weapon-change="handleWeaponChange"
-            v-if="weaponCategories != null"
+            v-if="categories != null"
           />
         </div>
         <div class="col pb-5">
           <transition name="fade" mode="out-in">
             <WeaponList
-              :weapons="activeWeaponList"
-              :categoryName="activeCategoryName"
-              :key="activeCategoryName"
+              :weapons="selectedCategoryWeapons"
+              :categoryName="selectedCategoryName"
               @weapon-change="handleWeaponChange"
               v-if="!isBrowsingWeapon"
             />
@@ -54,7 +53,8 @@ export default {
       weaponCategories: null,
       activeWeaponList: null,
       activeWeaponChallenges: null,
-      activeWeaponName: null
+      activeWeaponName: null,
+      categories: null
     };
   },
   methods: {
@@ -62,19 +62,24 @@ export default {
       let activeWeaponCategory = this.getActiveWeaponCategory()
       return activeWeaponCategory.weapons.find(w => w.name == this.activeWeaponName)
     },
-    setActiveWeaponCategoryId(categoryId) {
-      this.activeWeaponCategoryId = categoryId
-      this.isBrowsingWeapon = false
-    },
     setActiveWeapon(weaponName) {
       this.activeWeaponName = weaponName
       this.isBrowsingWeapon = true
     },
+    selectCategory(categoryId) {
+      this.categories.forEach((c) => {
+        c.selected = c.id == categoryId
+      })
+
+      this.isBrowsingWeapon = false
+    },
     handleCategoryChange(weaponCategoryId) {
-      API.getWeaponsInCategory(weaponCategoryId)
+      this.selectCategory(weaponCategoryId)
+
+      console.log(weaponCategoryId)
+      API.getWeaponsInCategory(this.selectedCategoryId)
         .then(response => {
           this.activeWeaponList = response.data
-          this.activeWeaponCategoryId = weaponCategoryId
           this.isBrowsingWeapon = false
         })
     },
@@ -102,13 +107,53 @@ export default {
   created() {
     API.getWeaponCategories()
       .then(response => {
-        this.weaponCategories = response.data
-        if (!this.activeWeaponCategoryId && this.weaponCategories.length > 0) {
-          this.handleCategoryChange(this.weaponCategories[0].id)
-        }
+        this.categories = response.data.map(category => (
+          {
+            ...category,
+            selected: false
+          }
+        ))
       })
   },
   computed: {
+    selectedCategory() {
+      if (!this.categories) {
+        return null
+      }
+
+      let selectedCategory = this.categories.find(c => c.selected)
+      if (!selectedCategory) {
+        selectedCategory = this.categories[0]
+      }
+
+      return selectedCategory
+    },
+    selectedCategoryId() {
+      let selectedCategory = this.selectedCategory
+
+      if (!selectedCategory) {
+        return null
+      }
+
+      return selectedCategory.id
+    },
+    selectedCategoryName() {
+      let selectedCategory = this.selectedCategory
+
+      if (!selectedCategory) {
+        return null
+      }
+      
+      return selectedCategory.categoryName
+    },
+    selectedCategoryWeapons() {
+      let selectedCategory = this.selectedCategory
+      if (!selectedCategory) {
+        return null
+      }
+
+      return selectedCategory.weapons
+    },
     activeCategoryName() {
       if (!this.weaponCategories) {
         return null

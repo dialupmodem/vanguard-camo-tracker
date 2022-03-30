@@ -12,42 +12,27 @@
     </div>
     <h4 class="mt-3 header">Vanguard Camo Tracker</h4>
     <hr />
+
     <div id="navCollapse" class="collapse menu-collapse">
       <div class="nav-container pb-4">
         <ul class="nav flex-column flex-nowrap">
-          <li class="nav-item" :key="weaponCategory.id" v-for="weaponCategory in weaponCategories">
+          <li
+            class="nav-item"
+            :key="categoryCollapse.categoryId"
+            v-for="categoryCollapse in categoryCollapses"
+          >
             <div class="container-fluid w-100">
-              <div class="row flex-nowrap justify-content-center">
-                <div class="col-4 col-lg-10 p-0 align-self-center">
-                  <button
-                    type="button"
-                    class="nav-link pe-0 ps-0 m-0"
-                    :class="{ active: isActiveCategory(weaponCategory.id) }"
-                    @click="changeCategory(weaponCategory.id)"
-                  >
-                    {{
-                      weaponCategory.name
-                    }}
-                  </button>
-                </div>
-                <div class="col-2 align-self-center">
-                  <button
-                    type="button"
-                    class="category-collapse-button"
-                    data-bs-toggle="collapse"
-                    :data-bs-target="`#categoryCollapse-${weaponCategory.id}`"
-                    :style="getCollapseButtonStyle(weaponCategory.id)"
-                    @click="toggleCategoryCollapse(weaponCategory.id)"
-                  >
-                    <i class="bi-chevron-right"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <WeaponNav :weaponCategory="weaponCategory" @change-weapon="handleWeaponChange"></WeaponNav>
-                </div>
-              </div>
+              <CategoryNavItem
+                :categoryCollapse="categoryCollapse"
+                :isActive="false"
+                @category-change="handleCategoryChange"
+                @toggle-collapse="handleToggleCollapse"
+              ></CategoryNavItem>
+              <WeaponNav
+                :weapons="categoryCollapse.weapons"
+                :categoryId="categoryCollapse.categoryId"
+                @change-weapon="handleWeaponChange"
+              ></WeaponNav>
             </div>
           </li>
         </ul>
@@ -58,29 +43,40 @@
 
 <script>
 
+import CategoryNavItem from './CategoryNavItem.vue'
 import WeaponNav from './WeaponNav.vue'
-import CategoryCollapses from '@/categories/CategoryCollapses.js'
+import CategoryCollapse from '@/categories/CategoryCollapse.js'
 
 export default {
   name: "CategoryNav",
   components: {
+    CategoryNavItem,
     WeaponNav
   },
   props: {
-    weaponCategories: Array,
-    activeCategoryId: Number
+    weaponCategories: {
+      type: Array,
+      required: true
+    },
+    activeCategoryId: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
-      categoryCollapses: new CategoryCollapses()
+      categoryCollapses: []
     };
   },
   methods: {
-    changeCategory(categoryId) {
+    handleCategoryChange(categoryId) {
       this.$emit("category-change", categoryId);
     },
     handleWeaponChange(weaponId) {
       this.$emit("weapon-change", weaponId);
+    },
+    handleToggleCollapse(categoryCollapse) {
+      categoryCollapse.toggleCollapse()
     },
     isActiveCategory(categoryId) {
       return this.activeCategoryId == categoryId;
@@ -89,7 +85,7 @@ export default {
       return this.categoryCollapses.GetCollapse(categoryId)
     },
     toggleCategoryCollapse(categoryId) {
-      this.categoryCollapses.ToggleCollapse(categoryId)
+      this.categoryCollapses.toggleCollapse(categoryId)
     },
     getCollapseButtonStyle(categoryId) {
       return this.categoryCollapses.GetButtonStyle(categoryId)
@@ -103,11 +99,8 @@ export default {
       return;
     }
 
-    this.weaponCategories.forEach((category) => {
-      this.categoryCollapses.collapses.push({
-        id: category.id,
-        collapsed: true
-      });
+    this.weaponCategories.forEach((weaponCategory) => {
+      this.categoryCollapses.push(new CategoryCollapse(weaponCategory))
     });
   }
 }
