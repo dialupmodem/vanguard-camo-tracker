@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'WeaponNav',
+  name: 'CategoryWeaponsNav',
   props: {
     weapons: {
       type: Array,

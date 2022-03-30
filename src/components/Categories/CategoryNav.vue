@@ -28,11 +28,11 @@
                 @category-change="handleCategoryChange"
                 @toggle-collapse="handleToggleCollapse"
               ></CategoryNavItem>
-              <WeaponNav
+              <CategoryWeaponsNav
                 :weapons="categoryCollapse.weapons"
                 :categoryId="categoryCollapse.categoryId"
                 @change-weapon="handleWeaponChange"
-              ></WeaponNav>
+              ></CategoryWeaponsNav>
             </div>
           </li>
         </ul>
@@ -44,14 +44,14 @@
 <script>
 
 import CategoryNavItem from './CategoryNavItem.vue'
-import WeaponNav from './WeaponNav.vue'
+import CategoryWeaponsNav from './CategoryWeaponsNav.vue'
 import CategoryCollapse from '@/categories/CategoryCollapse.js'
 
 export default {
   name: "CategoryNav",
   components: {
     CategoryNavItem,
-    WeaponNav
+    CategoryWeaponsNav
   },
   props: {
     weaponCategories: {

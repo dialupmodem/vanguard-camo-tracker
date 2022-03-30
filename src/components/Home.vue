@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import CategoryNav from './CategoryNav.vue'
+import CategoryNav from './Categories/CategoryNav.vue'
 import WeaponList from './WeaponList.vue'
 import WeaponChallengeList from './WeaponChallengeList.vue'
 import API from '/src/api/api.js'
