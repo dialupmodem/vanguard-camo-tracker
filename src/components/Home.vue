@@ -21,7 +21,7 @@
             />
             <WeaponChallengeList
               :weapon-name="selectedWeapon.name"
-              :weapon-challenges="activeWeaponChallenges"
+              :challenges="challenges"
               @progress-saved="handleProgressSaved"
               v-else
             />
@@ -48,23 +48,28 @@ export default {
   data() {
     return {
       categories: [],
-      weapons: []
+      weapons: [],
+      challenges: []
     };
   },
   methods: {
-    getActiveWeapon() {
-      let activeWeaponCategory = this.getActiveWeaponCategory()
-      return activeWeaponCategory.weapons.find(w => w.name == this.activeWeaponName)
-    },
-    setActiveWeapon(weaponName) {
-      this.activeWeaponName = weaponName
-
-    },
     selectCategory(categoryId) {
       this.categories.forEach((c) => {
         c.selected = c.id == categoryId
       })
+      this.weapons.forEach((c) => {
+        c.selected = false
+      })
+    },
 
+    selectWeapon(weaponId) {
+      this.weapons.forEach((w) => {
+        w.selected = w.id == weaponId
+      })
+
+      this.categories.forEach((c) => {
+        c.selected = false
+      })
     },
     handleCategoryChange(weaponCategoryId) {
       this.selectCategory(weaponCategoryId)
@@ -80,15 +85,14 @@ export default {
         })
     },
     handleWeaponChange(weaponId) {
-      this.weapons.forEach((weapon) => {
-        weapon.selected = weapon.id == weaponId
-      })
+      this.selectWeapon(weaponId)
+      this.getChallenges()
     },
     handleProgressSaved(savedChallenge) {
       API.updateChallengeProgress(savedChallenge.challengeId, savedChallenge.progress)
         .then(() => {
-          API.getWeaponChallenges(this.activeWeapon.id)
-            .then(response => (this.activeWeaponChallenges = response.data))
+          // API.getWeaponChallenges(this.activeWeapon.id)
+          //   .then(response => (this.activeWeaponChallenges = response.data))
         })
     },
     getCategories() {
@@ -102,6 +106,10 @@ export default {
         ))
       })
     },
+    getChallenges() {
+      API.getWeaponChallenges(this.selectedWeapon.id)
+        .then(response => (this.challenges = response.data))
+    }
     
   },
 
@@ -163,7 +171,6 @@ export default {
       return null;
     },
     isBrowsingWeapon() {
-      console.log(this.weapons)
       return this.weapons.some(w => w.selected)
     }
   }

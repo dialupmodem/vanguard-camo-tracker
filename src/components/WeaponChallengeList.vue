@@ -9,7 +9,7 @@
     <div class="row row-wrap">
       <div class="col-12">
         <WeaponChallengeCard
-          v-for="challenge in weaponChallenges"
+          v-for="challenge in challenges"
           :key="challenge.id"
           :challenge="challenge"
           @progress-saved="handleProgressSaved"
@@ -25,8 +25,14 @@ import WeaponChallengeCard from './WeaponChallengeCard.vue'
 export default {
   name: 'WeaponChallengeList',
   props: {
-    weaponName: String,
-    weaponChallenges: Array
+    weaponName: {
+      type: String,
+      required: true
+    },
+    challenges: {
+      type: Array,
+      required: true
+    }
   },
   components: {
     WeaponChallengeCard
