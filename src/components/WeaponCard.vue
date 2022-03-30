@@ -11,11 +11,7 @@
         <div class="row progress-row flex-column justify-content-center align-content-center">
           <div class="col-4 w-100">
             <div class="progress">
-              <div
-                class="progress-bar"
-                :class="getProgressBarClass()"
-                :style="getProgressBarStyle()"
-              ></div>
+              <div class="progress-bar" :class="getProgressBarClass" :style="getProgressBarStyle"></div>
             </div>
           </div>
           <div class="col-4 w-100 mt-3">{{ weapon.percentCompleted }}% Complete</div>

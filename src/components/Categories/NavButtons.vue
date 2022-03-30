@@ -6,7 +6,7 @@
         class="nav-link pe-0 ps-0 m-0"
         :class="categoryButtonClass"
         @click="changeCategory"
-      >{{ categoryCollapse.categoryName }}</button>
+      >{{ category.name }}</button>
     </div>
     <div class="col-2 align-self-center">
       <button
@@ -27,14 +27,10 @@
 export default {
   name: 'NavButtons',
   props: {
-    categoryCollapse: {
+    category: {
       type: Object,
       required: true
     },
-    isActive: {
-      type: Boolean,
-      required: true
-    }
   },
   methods: {
     changeCategory() {
@@ -45,6 +41,9 @@ export default {
     }
   },
   computed: {
+    isActive() {
+      return this.category.selected
+    },
     categoryButtonClass() {
       let classObject = {
         active: this.isActive
@@ -54,13 +53,13 @@ export default {
     },
     collapseButtonStyle() {
       let styleObject = {
-        transform: this.categoryCollapse.collapsed ? 'rotate(0deg)' : 'rotate(90deg)'
+        transform: this.category.collapsed ? 'rotate(0deg)' : 'rotate(90deg)'
       }
 
       return styleObject
     },
     collapseIdSelector() {
-      return `#categoryCollapse-${this.categoryCollapse.categoryId}`
+      return `#categoryCollapse-${this.category.id}`
     }
   }
 }

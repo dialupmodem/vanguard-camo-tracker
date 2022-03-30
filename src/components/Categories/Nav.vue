@@ -16,12 +16,12 @@
       <div class="nav-container pb-4">
         <ul class="nav flex-column flex-nowrap">
           <NavItem
-            :categoryCollapse="categoryCollapse"
-            :key="categoryCollapse.categoryId"
+            v-for="category in categories"
+            :category="category"
+            :key="category.id"
             @category-change="handleCategoryChange"
             @weapon-change="handleWeaponChange"
             @toggle-collapse="handleToggleCollapse"
-            v-for="categoryCollapse in categoryCollapses"
           />
         </ul>
       </div>
@@ -32,7 +32,6 @@
 <script>
 
 import NavItem from './NavItem.vue'
-import CategoryCollapse_ from '@/categories/CategoryCollapse_.js'
 
 export default {
   name: "Nav",
@@ -40,19 +39,10 @@ export default {
     NavItem
   },
   props: {
-    weaponCategories: {
+    categories: {
       type: Array,
       required: true
     },
-    activeCategoryId: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      categoryCollapses: []
-    };
   },
   methods: {
     handleCategoryChange(categoryId) {
@@ -61,18 +51,18 @@ export default {
     handleWeaponChange(weaponId) {
       this.$emit("weapon-change", weaponId);
     },
-    handleToggleCollapse(categoryCollapse) {
-      categoryCollapse.toggleCollapse()
+    handleToggleCollapse(category) {
+      category.collapsed = !category.collapsed
     },
   },
   created() {
-    if (this.weaponCategories == null) {
-      return;
-    }
+    // if (this.weaponCategories == null) {
+    //   return;
+    // }
 
-    this.weaponCategories.forEach((weaponCategory) => {
-      this.categoryCollapses.push(new CategoryCollapse_(weaponCategory))
-    });
+    // this.weaponCategories.forEach((weaponCategory) => {
+    //   this.categoryCollapses.push(new CategoryCollapse_(weaponCategory))
+    // });
   }
 }
 </script>
