@@ -6,7 +6,7 @@
         class="nav-link pe-0 ps-0 m-0"
         :class="categoryButtonClass"
         @click="changeCategory"
-      >{{ categoryName }}</button>
+      >{{ categoryCollapse.categoryName }}</button>
     </div>
     <div class="col-2 align-self-center">
       <button
@@ -45,15 +45,6 @@ export default {
     }
   },
   computed: {
-    categoryId() {
-      return this.categoryCollapse.categoryId
-    },
-    categoryName() {
-      return this.categoryCollapse.categoryName
-    },
-    collapseIdSelector() {
-      return `#categoryCollapse-${this.categoryId}`
-    },
     categoryButtonClass() {
       let classObject = {
         active: this.isActive
@@ -67,6 +58,9 @@ export default {
       }
 
       return styleObject
+    },
+    collapseIdSelector() {
+      return `#categoryCollapse-${this.categoryCollapse.categoryId}`
     }
   }
 }

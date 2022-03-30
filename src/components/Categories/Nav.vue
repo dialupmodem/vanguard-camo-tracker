@@ -12,7 +12,6 @@
     </div>
     <h4 class="mt-3 header">Vanguard Camo Tracker</h4>
     <hr />
-
     <div id="navCollapse" class="collapse menu-collapse">
       <div class="nav-container pb-4">
         <ul class="nav flex-column flex-nowrap">
@@ -65,21 +64,6 @@ export default {
     handleToggleCollapse(categoryCollapse) {
       categoryCollapse.toggleCollapse()
     },
-    isActiveCategory(categoryId) {
-      return this.activeCategoryId == categoryId;
-    },
-    getCategoryCollapse(categoryId) {
-      return this.categoryCollapses.GetCollapse(categoryId)
-    },
-    toggleCategoryCollapse(categoryId) {
-      this.categoryCollapses.toggleCollapse(categoryId)
-    },
-    getCollapseButtonStyle(categoryId) {
-      return this.categoryCollapses.GetButtonStyle(categoryId)
-    },
-    isCategoryCollapsed(categoryId) {
-      return this.categoryCollapses.IsCollapsed(categoryId)
-    }
   },
   created() {
     if (this.weaponCategories == null) {
@@ -94,27 +78,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.nav-link {
-  color: #fffafa;
-  text-align: left;
-  background-color: transparent;
-  border: none;
-
-  @media screen and (max-width: map-get($grid-breakpoints, lg)) {
-    text-align: center;
-  }
-}
-.nav-link:hover,
-.nav-link:focus,
-.active {
-  color: #909090;
-}
-.category-collapse-button {
-  background-color: transparent;
-  border: none;
-  color: #fffafa;
-  transition: transform 0.5s;
-}
 h4,
 hr {
   color: #fffafa;
