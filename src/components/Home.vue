@@ -47,11 +47,6 @@ export default {
     WeaponList,
     WeaponChallengeList
   },
-  data() {
-    return {
-      challenges: []
-    };
-  },
   methods: {
     selectCategory(categoryId) {
       let category = this.$store.state.categories.find(c => c.id == categoryId)
@@ -59,22 +54,23 @@ export default {
         this.$store.dispatch('selectCategory', category)
       }
     },
+    selectWeapon(weaponId) {
+      let weapon = this.$store.state.weapons.find(w => w.id == weaponId)
+      if (weapon) {
+        this.$store.dispatch('selectWeapon', weapon)
+      }
+    },
     handleCategoryChange(weaponCategoryId) {
       this.selectCategory(weaponCategoryId)
     },
     handleWeaponChange(weaponId) {
       this.selectWeapon(weaponId)
-      this.getChallenges()
     },
     handleProgressSaved(savedChallenge) {
       API.updateChallengeProgress(savedChallenge.challengeId, savedChallenge.progress)
         .then(() => {
 
         })
-    },
-    getChallenges() {
-      API.getWeaponChallenges(this.selectedWeapon.id)
-        .then(response => (this.challenges = response.data))
     },
 
   },
@@ -103,6 +99,9 @@ export default {
     },
     isBrowsingWeapon() {
       return this.weapons.some(w => w.selected)
+    },
+    challenges() {
+      return this.$store.state.challenges
     }
   }
 };
