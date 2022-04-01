@@ -16,11 +16,13 @@
             <WeaponList
               :weapons="weapons"
               :categoryName="selectedCategoryName"
+              :key="selectedCategoryName"
               @weapon-change="handleWeaponChange"
               v-if="!isBrowsingWeapon"
             />
             <WeaponChallengeList
               :weapon-name="selectedWeapon.name"
+              :key="selectedWeapon.name"
               :challenges="challenges"
               @progress-saved="handleProgressSaved"
               v-else
@@ -61,7 +63,6 @@ export default {
         c.selected = false
       })
     },
-
     selectWeapon(weaponId) {
       this.weapons.forEach((w) => {
         w.selected = w.id == weaponId
@@ -71,18 +72,16 @@ export default {
         c.selected = false
       })
     },
+    selectDefaultCategory() {
+      if (!this.categories || !this.categories.length > 0) {
+        return
+      }
+
+      this.selectCategory(this.categories[0].id)
+    },
     handleCategoryChange(weaponCategoryId) {
       this.selectCategory(weaponCategoryId)
-
-      API.getWeaponsInCategory(this.selectedCategoryId)
-        .then(response => {
-          this.weapons = response.data.map(weapon => (
-            {
-            ...weapon,
-            selected: false
-            }
-          ))
-        })
+      this.getWeaponsInCategory(weaponCategoryId)
     },
     handleWeaponChange(weaponId) {
       this.selectWeapon(weaponId)
@@ -91,42 +90,56 @@ export default {
     handleProgressSaved(savedChallenge) {
       API.updateChallengeProgress(savedChallenge.challengeId, savedChallenge.progress)
         .then(() => {
-          // API.getWeaponChallenges(this.activeWeapon.id)
-          //   .then(response => (this.activeWeaponChallenges = response.data))
+
         })
     },
     getCategories() {
-      API.getWeaponCategories().then(response => {
-        this.categories = response.data.map(category => (
-          {
-            ...category,
-            selected: false,
-            collapsed: true
-          }
-        ))
+      return new Promise((resolve) => {
+        API.getWeaponCategories()
+          .then(response => {
+            this.categories = response.data.map(category => (
+              {
+                ...category,
+                selected: false,
+                collapsed: true
+              }
+            ))
+            resolve()
+          })
       })
     },
     getChallenges() {
       API.getWeaponChallenges(this.selectedWeapon.id)
         .then(response => (this.challenges = response.data))
+    },
+    getWeaponsInCategory(categoryId) {
+      API.getWeaponsInCategory(categoryId)
+        .then(response => {
+          this.weapons = response.data.map(weapon => (
+            {
+              ...weapon,
+              selected: false
+            }
+          ))
+        })
     }
-    
+
   },
 
   created() {
     this.getCategories()
+      .then(() => { 
+        this.selectDefaultCategory()
+        this.getWeaponsInCategory(this.selectedCategoryId)
+      })
   },
   computed: {
     selectedCategory() {
-      if (!this.categories) {
+      if (!this.categories || !(this.categories.length > 0)) {
         return null
       }
 
       let selectedCategory = this.categories.find(c => c.selected)
-      if (!selectedCategory) {
-        selectedCategory = this.categories[0]
-      }
-
       return selectedCategory
     },
     selectedCategoryId() {
@@ -158,17 +171,6 @@ export default {
       }
 
       return weapon
-    },
-    activeCategoryName() {
-      if (!this.weaponCategories) {
-        return null
-      }
-
-      let activeCategory = this.weaponCategories.find(w => w.id == this.activeWeaponCategoryId)
-      if (activeCategory) {
-        return activeCategory.name
-      }
-      return null;
     },
     isBrowsingWeapon() {
       return this.weapons.some(w => w.selected)
