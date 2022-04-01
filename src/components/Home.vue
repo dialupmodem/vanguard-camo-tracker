@@ -49,7 +49,6 @@ export default {
   },
   data() {
     return {
-      categories: [],
       weapons: [],
       challenges: []
     };
@@ -93,21 +92,6 @@ export default {
 
         })
     },
-    getCategories() {
-      return new Promise((resolve) => {
-        API.getWeaponCategories()
-          .then(response => {
-            this.categories = response.data.map(category => (
-              {
-                ...category,
-                selected: false,
-                collapsed: true
-              }
-            ))
-            resolve()
-          })
-      })
-    },
     getChallenges() {
       API.getWeaponChallenges(this.selectedWeapon.id)
         .then(response => (this.challenges = response.data))
@@ -127,38 +111,20 @@ export default {
   },
 
   created() {
-    this.getCategories()
-      .then(() => { 
-        this.selectDefaultCategory()
-        this.getWeaponsInCategory(this.selectedCategoryId)
-      })
+    this.$store.dispatch('getCategories')
   },
   computed: {
+    categories() {
+      return this.$store.state.categories
+    },
     selectedCategory() {
-      if (!this.categories || !(this.categories.length > 0)) {
-        return null
-      }
-
-      let selectedCategory = this.categories.find(c => c.selected)
-      return selectedCategory
+      return this.$store.getters.selectedCategory
     },
     selectedCategoryId() {
-      let selectedCategory = this.selectedCategory
-
-      if (!selectedCategory) {
-        return null
-      }
-
-      return selectedCategory.id
+      return this.selectedCategory ? this.selectedCategory.id : null
     },
     selectedCategoryName() {
-      let selectedCategory = this.selectedCategory
-
-      if (!selectedCategory) {
-        return null
-      }
-
-      return selectedCategory.name
+      return this.selectedCategory ? this.selectedCategory.name : null
     },
     selectedWeapon() {
       if (this.weapons == null) {
