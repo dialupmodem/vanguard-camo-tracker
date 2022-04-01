@@ -7,5 +7,18 @@ export default {
         collapsed: true
       }
     ))
+  },
+  mapWeapons(weaponsResponse) {
+    return weaponsResponse.map(w => (
+      {
+        ...w,
+        selected: false,
+      }
+    ))
+  },
+  deselectAll(objectArray) {
+    objectArray.forEach(o => {
+      o.selected = false
+    })
   }
 }

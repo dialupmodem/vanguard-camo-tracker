@@ -49,38 +49,18 @@ export default {
   },
   data() {
     return {
-      weapons: [],
       challenges: []
     };
   },
   methods: {
     selectCategory(categoryId) {
-      this.categories.forEach((c) => {
-        c.selected = c.id == categoryId
-      })
-      this.weapons.forEach((c) => {
-        c.selected = false
-      })
-    },
-    selectWeapon(weaponId) {
-      this.weapons.forEach((w) => {
-        w.selected = w.id == weaponId
-      })
-
-      this.categories.forEach((c) => {
-        c.selected = false
-      })
-    },
-    selectDefaultCategory() {
-      if (!this.categories || !this.categories.length > 0) {
-        return
+      let category = this.$store.state.categories.find(c => c.id == categoryId)
+      if (category) {
+        this.$store.dispatch('selectCategory', category)
       }
-
-      this.selectCategory(this.categories[0].id)
     },
     handleCategoryChange(weaponCategoryId) {
       this.selectCategory(weaponCategoryId)
-      this.getWeaponsInCategory(weaponCategoryId)
     },
     handleWeaponChange(weaponId) {
       this.selectWeapon(weaponId)
@@ -96,17 +76,6 @@ export default {
       API.getWeaponChallenges(this.selectedWeapon.id)
         .then(response => (this.challenges = response.data))
     },
-    getWeaponsInCategory(categoryId) {
-      API.getWeaponsInCategory(categoryId)
-        .then(response => {
-          this.weapons = response.data.map(weapon => (
-            {
-              ...weapon,
-              selected: false
-            }
-          ))
-        })
-    }
 
   },
 
@@ -126,17 +95,11 @@ export default {
     selectedCategoryName() {
       return this.selectedCategory ? this.selectedCategory.name : null
     },
+    weapons() {
+      return this.$store.state.weapons
+    },
     selectedWeapon() {
-      if (this.weapons == null) {
-        return null
-      }
-
-      let weapon = this.weapons.find(w => w.selected)
-      if (!weapon) {
-        return null
-      }
-
-      return weapon
+      return this.$store.getters.selectedWeapon
     },
     isBrowsingWeapon() {
       return this.weapons.some(w => w.selected)

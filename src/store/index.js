@@ -16,10 +16,13 @@ export default new Vuex.Store({
     updateCategories(state, categories) {
       state.categories = categories
     },
-    selectDefaultCategory(state) {
-      if (!state.categories || !(state.categories.length > 0))  {
-        state.categories[0].selected = true
-      }
+    setCategorySelected(state, category) {
+      state.categories.forEach(c => {
+        c.selected = c.id == category.id
+      })
+    },
+    updateWeapons(state, weapons) {
+      state.weapons = weapons
     }
   },
   getters: {
@@ -30,7 +33,15 @@ export default new Vuex.Store({
       }
 
       return selectedCategory
-    } 
+    },
+    selectedWeapon(state) {
+      let selectedWeapon = state.weapons.find(w => w.selected)
+      if (!selectedWeapon) {
+        return null
+      }
+
+      return selectedWeapon
+    }
   },
   actions: {
     getCategories(context) {
@@ -41,9 +52,31 @@ export default new Vuex.Store({
         context.commit('updateCategories', mappedCategories)
 
         if (!context.getters.selectedCategory) {
-          context.commit('selectDefaultCategory')
+          context.dispatch('setDefaultCategory')
         }
       })
+    },
+    getCategoryWeapons(context) {
+      let selectedCategory = context.getters.selectedCategory
+      console.log(selectedCategory)
+
+      API.getWeaponsInCategory(selectedCategory.id)
+      .then(response => {
+          let mappedWeapons = utils.mapWeapons(response.data)
+          context.commit('updateWeapons', mappedWeapons)
+      })
+    },
+    selectCategory(context, category) {
+      context.commit('setCategorySelected', category)
+      context.dispatch('getCategoryWeapons')
+    },
+    setDefaultCategory(context) {
+      if (!context.state.categories) {
+        return
+      }
+
+      let defaultCategory = context.state.categories[0]
+      context.dispatch('selectCategory', defaultCategory)
     }
   }
 })
