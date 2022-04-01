@@ -15,7 +15,7 @@
               v-for="weapon in weapons"
               :key="weapon.id"
             >
-              <WeaponCard :weapon="weapon" @weapon-change="handleWeaponChange" />
+              <WeaponCard :weapon="weapon" />
             </div>
           </div>
         </div>
@@ -29,17 +29,16 @@ import WeaponCard from './WeaponCard.vue'
 
 export default {
   name: 'WeaponList',
-  props: {
-    weapons: Array,
-    categoryName: String
-  },
   components: {
     WeaponCard
   },
-  methods: {
-    handleWeaponChange(weaponId) {
-      this.$emit('weapon-change', weaponId)
+  computed: {
+    weapons() {
+      return this.$store.state.weapons
+    },
+    categoryName() {
+      return this.$store.getters.selectedCategory?.name
     }
-  },
+  }
 }
 </script>

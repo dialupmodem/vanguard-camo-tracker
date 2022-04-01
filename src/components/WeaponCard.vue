@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     changeSelection() {
-      this.$emit('weapon-change', this.weapon.id)
+      this.$store.dispatch('selectWeapon', this.weapon)
     },
     getProgressBarClass() {
       let percentage = this.weapon.percentCompleted

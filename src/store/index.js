@@ -73,6 +73,7 @@ export default new Vuex.Store({
       API.getWeaponsInCategory(selectedCategory.id)
       .then(response => {
           let mappedWeapons = utils.mapWeapons(response.data)
+          mappedWeapons = utils.mapWeaponCategoryName(mappedWeapons, context.state.categories)
           context.commit('updateWeapons', mappedWeapons)
       })
     },
