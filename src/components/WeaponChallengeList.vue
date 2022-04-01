@@ -12,7 +12,6 @@
           v-for="challenge in challenges"
           :key="challenge.id"
           :challenge="challenge"
-          @progress-saved="handleProgressSaved"
         />
       </div>
     </div>
@@ -24,22 +23,15 @@ import WeaponChallengeCard from './WeaponChallengeCard.vue'
 
 export default {
   name: 'WeaponChallengeList',
-  props: {
-    weaponName: {
-      type: String,
-      required: true
-    },
-    challenges: {
-      type: Array,
-      required: true
-    }
-  },
   components: {
     WeaponChallengeCard
   },
-  methods: {
-    handleProgressSaved(savedChallenge) {
-      this.$emit('progress-saved', savedChallenge)
+  computed: {
+    weaponName() {
+      return this.$store.getters.selectedWeapon?.name
+    },
+    challenges() {
+      return this.$store.state.challenges
     }
   }
 }
