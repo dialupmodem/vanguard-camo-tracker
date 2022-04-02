@@ -21,6 +21,12 @@ export default new Vuex.Store({
         c.selected = c.id == category.id
       })
     },
+    toggleCategoryCollapse(state, category) {
+      let stateCategory = state.categories.find(c => c.id == category.id)
+      if (stateCategory) {
+        stateCategory.collapsed = !stateCategory.collapsed
+      }
+    },
     updateWeapons(state, weapons) {
       state.weapons = weapons
     },

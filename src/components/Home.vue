@@ -3,30 +3,12 @@
     <div class="container-fluid h-100">
       <div class="row h-100">
         <div class="col-xs-12 col-md-2 col-lg-2 nav-container">
-          <Nav
-            :categories="categories"
-            :active-category-id="selectedCategoryId"
-            @category-change="handleCategoryChange"
-            @weapon-change="handleWeaponChange"
-            v-if="categories != null"
-          />
+          <Nav />
         </div>
         <div class="col pb-5">
           <transition name="fade" mode="out-in">
-            <WeaponList
-              :weapons="weapons"
-              :categoryName="selectedCategoryName"
-              :key="selectedCategoryName"
-              @weapon-change="handleWeaponChange"
-              v-if="!isBrowsingWeapon"
-            />
-            <WeaponChallengeList
-              :weapon-name="selectedWeapon.name"
-              :key="selectedWeapon.name"
-              :challenges="challenges"
-              @progress-saved="handleProgressSaved"
-              v-else
-            />
+            <WeaponList :key="selectedCategoryId" v-if="!isBrowsingWeapon" />
+            <WeaponChallengeList :key="selectedWeaponId" v-else />
           </transition>
         </div>
       </div>
@@ -48,24 +30,6 @@ export default {
     WeaponChallengeList
   },
   methods: {
-    selectCategory(categoryId) {
-      let category = this.$store.state.categories.find(c => c.id == categoryId)
-      if (category) {
-        this.$store.dispatch('selectCategory', category)
-      }
-    },
-    selectWeapon(weaponId) {
-      let weapon = this.$store.state.weapons.find(w => w.id == weaponId)
-      if (weapon) {
-        this.$store.dispatch('selectWeapon', weapon)
-      }
-    },
-    handleCategoryChange(weaponCategoryId) {
-      this.selectCategory(weaponCategoryId)
-    },
-    handleWeaponChange(weaponId) {
-      this.selectWeapon(weaponId)
-    },
     handleProgressSaved(savedChallenge) {
       API.updateChallengeProgress(savedChallenge.challengeId, savedChallenge.progress)
         .then(() => {
@@ -88,21 +52,19 @@ export default {
     selectedCategoryId() {
       return this.selectedCategory ? this.selectedCategory.id : null
     },
-    selectedCategoryName() {
-      return this.selectedCategory ? this.selectedCategory.name : null
-    },
     weapons() {
       return this.$store.state.weapons
     },
     selectedWeapon() {
       return this.$store.getters.selectedWeapon
     },
+    selectedWeaponId() {
+      return this.selectedWeapon ? this.selectedWeapon.id : null
+    },
     isBrowsingWeapon() {
       return this.weapons.some(w => w.selected)
     },
-    challenges() {
-      return this.$store.state.challenges
-    }
+
   }
 };
 </script>

@@ -34,10 +34,10 @@ export default {
   },
   methods: {
     changeCategory() {
-      this.$emit('category-change')
+      this.$store.dispatch('selectCategory', this.category)
     },
     toggleCollapse() {
-      this.$emit('toggle-collapse')
+      this.$store.commit('toggleCategoryCollapse', this.category)
     }
   },
   computed: {
@@ -66,23 +66,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .nav-link {
-    color: #fffafa;
-    text-align: left;
-    background-color: transparent;
-    border: none;
+.nav-link {
+  color: #fffafa;
+  text-align: left;
+  background-color: transparent;
+  border: none;
 
-    @media screen and (max-width: map-get($grid-breakpoints, lg)) {
-      text-align: center;
-    }
+  @media screen and (max-width: map-get($grid-breakpoints, lg)) {
+    text-align: center;
   }
-  .nav-link:hover, .nav-link:focus, .active {
-    color: #909090;
-  }
-  .category-collapse-button {
-    background-color: transparent;
-    border: none;
-    color: #fffafa;
-    transition: transform 0.5s;
-  }
+}
+.nav-link:hover,
+.nav-link:focus,
+.active {
+  color: #909090;
+}
+.category-collapse-button {
+  background-color: transparent;
+  border: none;
+  color: #fffafa;
+  transition: transform 0.5s;
+}
 </style>

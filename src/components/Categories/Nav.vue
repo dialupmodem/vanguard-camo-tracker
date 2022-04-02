@@ -15,14 +15,7 @@
     <div id="navCollapse" class="collapse menu-collapse">
       <div class="nav-container pb-4">
         <ul class="nav flex-column flex-nowrap">
-          <NavItem
-            v-for="category in categories"
-            :category="category"
-            :key="category.id"
-            @category-change="handleCategoryChange"
-            @weapon-change="handleWeaponChange"
-            @toggle-collapse="handleToggleCollapse"
-          />
+          <NavItem v-for="category in categories" :category="category" :key="category.id" />
         </ul>
       </div>
     </div>
@@ -38,31 +31,10 @@ export default {
   components: {
     NavItem
   },
-  props: {
-    categories: {
-      type: Array,
-      required: true
-    },
-  },
-  methods: {
-    handleCategoryChange(categoryId) {
-      this.$emit("category-change", categoryId);
-    },
-    handleWeaponChange(weaponId) {
-      this.$emit("weapon-change", weaponId);
-    },
-    handleToggleCollapse(category) {
-      category.collapsed = !category.collapsed
-    },
-  },
-  created() {
-    // if (this.weaponCategories == null) {
-    //   return;
-    // }
-
-    // this.weaponCategories.forEach((weaponCategory) => {
-    //   this.categoryCollapses.push(new CategoryCollapse_(weaponCategory))
-    // });
+  computed: {
+    categories() {
+      return this.$store.state.categories
+    }
   }
 }
 </script>
