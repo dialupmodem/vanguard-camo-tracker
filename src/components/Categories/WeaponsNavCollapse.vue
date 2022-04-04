@@ -4,7 +4,12 @@
       <div class="collapse" :id="collapseId">
         <ul class="nav flex-column flex-nowrap">
           <li class="nav-item" :key="weapon.id" v-for="weapon in weapons">
-            <a class="nav-link" href="#" @click="changeWeapon(weapon)">{{ weapon.name }}</a>
+            <a
+              class="nav-link"
+              href="#"
+              :class="getLinkClass(weapon)"
+              @click="changeWeapon(weapon)"
+            >{{ weapon.name }}</a>
           </li>
         </ul>
       </div>
@@ -13,6 +18,9 @@
 </template>
 
 <script>
+
+import Collapse from 'bootstrap/js/dist/collapse.js'
+
 export default {
   name: 'WeaponsNavCollapse',
   props: {
@@ -24,6 +32,14 @@ export default {
   methods: {
     changeWeapon(weapon) {
       this.$store.dispatch('selectWeapon', weapon)
+    },
+    getLinkClass(weapon) {
+      let selectedWeapon = this.$store.getters.selectedWeapon
+      if (!selectedWeapon) {
+        return null
+      }
+
+      return weapon.id == this.$store.getters.selectedWeapon.id ? 'active' : ''
     }
   },
   computed: {
@@ -32,6 +48,24 @@ export default {
     },
     weapons() {
       return this.category.weapons
+    },
+    bootstrapCollapse() {
+      let collapseElement = document.querySelector(`#${this.collapseId}`)
+      let bootstrapCollapse = new Collapse(collapseElement)
+
+      return bootstrapCollapse
+    }
+  },
+  watch: {
+    'category.collapsed': {
+      handler(newVal) {
+        if (newVal) {
+          this.bootstrapCollapse.hide()
+        }
+        else {
+          this.bootstrapCollapse.show()
+        }
+      }
     }
   }
 }

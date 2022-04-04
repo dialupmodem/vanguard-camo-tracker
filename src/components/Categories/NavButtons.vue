@@ -13,7 +13,6 @@
         type="button"
         class="category-collapse-button"
         data-bs-toggle="collapse"
-        :data-bs-target="collapseIdSelector"
         :style="collapseButtonStyle"
         @click="toggleCollapse"
       >
@@ -61,7 +60,7 @@ export default {
     collapseIdSelector() {
       return `#categoryCollapse-${this.category.id}`
     }
-  }
+  },
 }
 </script>
 

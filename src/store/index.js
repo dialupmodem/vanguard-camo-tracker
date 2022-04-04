@@ -86,6 +86,10 @@ export default new Vuex.Store({
     getWeaponChallenges(context) {
       let selectedWeapon = context.getters.selectedWeapon
 
+      if (!selectedWeapon) {
+        return
+      }
+
       API.getWeaponChallenges(selectedWeapon.id)
       .then(response => context.commit('updateChallenges', response.data))
     },
@@ -104,6 +108,13 @@ export default new Vuex.Store({
     },
     selectWeapon(context, weapon) {
       context.commit('setWeaponSelection', weapon)
+
+      let weaponCategory = context.state.categories.find(c => c.weapons.some(w => w.id == weapon.id))
+
+      if (weaponCategory && weaponCategory.collapsed) {
+        context.commit('toggleCategoryCollapse', weaponCategory)
+      }
+
       context.dispatch('getWeaponChallenges')
     }
   }
