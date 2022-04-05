@@ -8,7 +8,7 @@
         <div class="col pb-5">
           <transition name="fade" mode="out-in">
             <div v-if="dataLoading" :key="dataLoading">
-              <Spinner />
+              <HomeSpinner />
             </div>
             <div v-else>
               <transition name="fade" made="out-in">
@@ -20,6 +20,7 @@
         </div>
       </div>
     </div>
+    <ErrorModal />
   </div>
 </template>
 
@@ -27,7 +28,8 @@
 import Nav from './Categories/Nav.vue'
 import WeaponList from './Weapons/WeaponList.vue'
 import ChallengeList from './Weapons/ChallengeList.vue'
-import Spinner from './Spinner.vue'
+import HomeSpinner from './HomeSpinner.vue'
+import ErrorModal from './ErrorModal.vue'
 import API from '/src/api/api.js'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
@@ -37,7 +39,8 @@ export default {
     Nav,
     WeaponList,
     ChallengeList,
-    Spinner
+    HomeSpinner,
+    ErrorModal
   },
   methods: {
     ...mapActions({

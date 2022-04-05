@@ -16,7 +16,8 @@ export default new Vuex.Store({
   },
   state: {
     dataLoading: false,
-    dataUpdating: false
+    dataUpdating: false,
+    dataError: false
   },
   mutations: {
     setDataLoading(state, isLoading) {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     },
     setDataUpdating(state, isUpdating) {
       state.dataUpdating = isUpdating
+    },
+    setDataError(state, isError) {
+      state.dataError = isError
     }
   }
 })

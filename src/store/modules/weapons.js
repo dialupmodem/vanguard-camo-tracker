@@ -35,6 +35,9 @@ const weapons = {
           commit('update', mappedWeapons)
           commit('setDataLoading', false, { root: true })
         })
+        .catch(() => {
+          commit('setDataError', true, { root: true })
+        })
     },
     selectWeapon({ commit, dispatch, rootState }, weapon) {
       commit('setSelected', weapon)
