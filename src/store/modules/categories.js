@@ -24,36 +24,36 @@ const categories = {
     }
   },
   actions: {
-    getCategories(context) {
-      context.commit('setDataLoading', true, { root: true })
+    getCategories({ commit, dispatch, getters }) {
+      commit('setDataLoading', true, { root: true })
 
       API.getWeaponCategories()
         .then(response => {
           let mappedCategories = mapCategories(response.data)
 
-          context.commit('update', mappedCategories)
+          commit('update', mappedCategories)
 
-          if (!context.getters.selectedCategory) {
-            context.dispatch('setDefaultCategory')
+          if (!getters.selectedCategory) {
+            dispatch('setDefaultCategory')
           }
 
-          context.commit('setDataLoading', false, { root: true })
+          commit('setDataLoading', false, { root: true })
         })
         .catch((error) => {
-          context.commit('setDataError', error, { root: true })
+          commit('setDataError', error, { root: true })
         })
     },
-    selectCategory(context, category) {
-      context.commit('setSelected', category)
-      context.commit('weapons/deselectAll', null, { root: true })
+    selectCategory({ commit }, category) {
+      commit('setSelected', category)
+      commit('weapons/deselectAll', null, { root: true })
     },
-    setDefaultCategory(context) {
-      if (!context.state.categories) {
+    setDefaultCategory({ state, dispatch }) {
+      if (!state.categories) {
         return
       }
 
-      let defaultCategory = context.state.categories[0]
-      context.dispatch('selectCategory', defaultCategory)
+      let defaultCategory = state.categories[0]
+      dispatch('selectCategory', defaultCategory)
     },
 
   },
