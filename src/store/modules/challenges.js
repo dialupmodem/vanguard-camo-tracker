@@ -37,8 +37,8 @@ const challenges = {
           commit('update', response.data)
           commit('setDataLoading', false, { root: true })
         })
-        .catch(() => {
-          commit('setDataError', true, { root: true })
+        .catch((error) => {
+          commit('setDataError', error, { root: true })
         })
     },
     getWeaponChallenge({ commit, rootState }, challengeId) {
@@ -51,8 +51,8 @@ const challenges = {
           commit('updateChallenge', response.data)
           commit('setDataUpdating', false, { root: true })
         })
-        .catch(() => {
-          commit('setDataError', true, { root: true })
+        .catch((error) => {
+          commit('setDataError', error, { root: true })
         })
     },
     updateChallengeProgress({ commit, dispatch }, { challengeId, progressValue }) {
@@ -62,8 +62,8 @@ const challenges = {
         .then(() => {
           dispatch('getWeaponChallenge', challengeId)
         })
-        .catch(() => {
-          commit('setDataError', true, { root: true })
+        .catch((error) => {
+          commit('setDataError', error, { root: true })
         })
     }
   }

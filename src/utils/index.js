@@ -1,4 +1,5 @@
 export default {
+
   mapCategories(categoriesResponse) {
     return categoriesResponse.map(c => (
       {
@@ -39,5 +40,29 @@ export default {
     objectArray.forEach(o => {
       o.selected = false
     })
+  },
+  getErrorMessage(error) {
+    if (!error) {
+      return 'Unspecified Error'
+    }
+
+    console.log(error)
+    window.error = error
+
+    if (error.response) {
+      return `${error.response.data} ${error.response.status} ${error.response.headers}`
+    }
+    else if (error.message) {
+      return `${error.message}`
+    }
+    else {
+      return 'Unspecified Error'
+    }
+  },
+  mapError(error) {
+    return {
+      isError: true,
+      message: this.getErrorMessage(error)
+    }
   }
 }

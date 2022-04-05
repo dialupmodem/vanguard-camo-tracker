@@ -39,8 +39,8 @@ const categories = {
 
           context.commit('setDataLoading', false, { root: true })
         })
-        .catch(() => {
-          context.commit('setDataError', true, { root: true })
+        .catch((error) => {
+          context.commit('setDataError', error, { root: true })
         })
     },
     selectCategory(context, category) {

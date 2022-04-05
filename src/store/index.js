@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import categories from './modules/categories.js'
 import weapons from './modules/weapons.js'
 import challenges from './modules/challenges.js'
+import utils from '@/utils/'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,10 @@ export default new Vuex.Store({
   state: {
     dataLoading: false,
     dataUpdating: false,
-    dataError: false
+    dataError: {
+      isError: false,
+      message: null
+    }
   },
   mutations: {
     setDataLoading(state, isLoading) {
@@ -26,8 +30,16 @@ export default new Vuex.Store({
     setDataUpdating(state, isUpdating) {
       state.dataUpdating = isUpdating
     },
-    setDataError(state, isError) {
-      state.dataError = isError
+    setDataError(state, error) {
+      state.dataError = utils.mapError(error)
+      state.dataLoading = false
+      state.dataUpdating = false
+    },
+    clearDataError(state) {
+      state.dataError = {
+        isError: false,
+        message: null
+      }
     }
   }
 })

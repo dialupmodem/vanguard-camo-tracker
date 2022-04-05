@@ -4,9 +4,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title text-danger">Error</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" @click="dismissError"></button>
+          <button type="button" class="btn-close" @click="dismissError"></button>
         </div>
-        <div class="modal-body">An error occurred while communicating with the API.</div>
+        <div
+          class="modal-body"
+        >An error occurred while communicating with the API:<br /> {{ dataError.message }}</div>
         <div class="modal-footer"></div>
       </div>
     </div>
@@ -21,10 +23,10 @@ export default {
   name: 'ErrorModal',
   methods: {
     ...mapMutations({
-      setDataError: 'setDataError'
+      clearDataError: 'clearDataError'
     }),
     dismissError() {
-      this.setDataError(false)
+      this.clearDataError()
     }
   },
   computed: {
@@ -38,7 +40,7 @@ export default {
   },
   watch: {
     dataError(newVal) {
-      if (newVal) {
+      if (newVal.isError) {
         this.modal.show()
       }
       else {
