@@ -1,5 +1,5 @@
 import API from '@/api/api.js'
-import utils from '@/utils/'
+import { mapCategories } from '@/utils/utils'
 
 const categories = {
   namespaced: true,
@@ -29,7 +29,7 @@ const categories = {
 
       API.getWeaponCategories()
         .then(response => {
-          let mappedCategories = utils.mapCategories(response.data)
+          let mappedCategories = mapCategories(response.data)
 
           context.commit('update', mappedCategories)
 
@@ -43,10 +43,15 @@ const categories = {
           context.commit('setDataError', error, { root: true })
         })
     },
-    selectCategory(context, category) {
+    selectCategory(context, { category, weapon }) {
       context.commit('setSelected', category)
       context.commit('weapons/deselectAll', null, { root: true })
       context.dispatch('weapons/getCategoryWeapons', null, { root: true })
+
+      if (weapon) {
+        console.log(weapon)
+        context.commit('weapons/setSelected', weapon, { root: true })
+      }
     },
     setDefaultCategory(context) {
       if (!context.state.categories) {

@@ -1,5 +1,5 @@
 import API from '@/api/api.js'
-import utils from '@/utils/'
+import { deselectAll, mapWeapons, mapWeaponCategoryName } from '@/utils/utils'
 
 const weapons = {
   namespaced: true,
@@ -13,10 +13,14 @@ const weapons = {
     setSelected(state, weapon) {
       state.weapons.forEach(w => {
         w.selected = w.id == weapon.id
+        if (w.selected) {
+          console.log(w)
+        }
       })
+
     },
     deselectAll(state) {
-      utils.deselectAll(state.weapons)
+      deselectAll(state.weapons)
     }
   },
   actions: {
@@ -30,8 +34,8 @@ const weapons = {
 
       API.getWeaponsInCategory(selectedCategory.id)
         .then(response => {
-          let mappedWeapons = utils.mapWeapons(response.data)
-          mappedWeapons = utils.mapWeaponCategoryName(mappedWeapons, rootState.categories.categories)
+          let mappedWeapons = mapWeapons(response.data)
+          mappedWeapons = mapWeaponCategoryName(mappedWeapons, rootState.categories.categories)
           commit('update', mappedWeapons)
           commit('setDataLoading', false, { root: true })
         })
@@ -40,12 +44,13 @@ const weapons = {
         })
     },
     selectWeapon({ commit, dispatch, rootState }, weapon) {
-      commit('setSelected', weapon)
-
       let weaponCategory = rootState.categories.categories.find(c => c.weapons.some(w => w.id == weapon.id))
 
-      if (weaponCategory && weaponCategory.collapsed) {
-        commit('categories/toggleCollapsed', weaponCategory, { root: true })
+      if (weaponCategory) {
+        if (weaponCategory.collapsed) {
+          commit('categories/toggleCollapsed', weaponCategory, { root: true })
+        }
+        dispatch('categories/selectCategory', { category: weaponCategory, weapon: weapon }, { root: true })
       }
 
       dispatch('challenges/getWeaponChallenges', null, { root: true })

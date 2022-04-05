@@ -22,7 +22,9 @@
   </div>
 </template>
 
-<script>import { mapActions, mapMutations } from "vuex"
+<script>
+
+import { mapActions, mapMutations } from "vuex"
 
 export default {
   name: 'NavButtons',
