@@ -15,23 +15,35 @@
         <div class="row justify-content-start">
           <div class="col-12 col-md-1 progress-input-container">
             <label for="progressInput">Current Progress:</label>
-            <input id="progressInput" class="form-control" type="number" v-model="currentProgress" />
+            <input id="progressInput" class="form-control" type="number" v-model="progress" />
           </div>
           <div class="col-12 col-md-1 mt-3 mt-md-0 align-self-end justify-content-start">
             <button
               type="button"
               class="btn btn-primary"
               :disabled="saveDisabled"
+              style="min-width: 62px; min-height: 28px;"
               @click="saveProgress"
-            >Save</button>
+            >
+              <div class="spinner-border spinner-border-sm" v-if="dataUpdating">
+                <span class="visually-hidden">Saving...</span>
+              </div>
+              <span v-else>Save</span>
+            </button>
           </div>
           <div class="col-12 col-md mt-2 mt-md-0 justify-self-end align-self-end text-end">
             <button
               type="button"
               class="btn btn-primary"
-              :disabled="isComplete"
+              :disabled="markCompleteDisabled"
+              style="min-width: 143px; min-height: 38px;"
               @click="markCompleted"
-            >Mark Completed</button>
+            >
+              <div class="spinner-border spinner-border-sm" v-if="dataUpdating">
+                <span class="visually-hidden">Saving...</span>
+              </div>
+              <span v-else>Mark Completed</span>
+            </button>
           </div>
         </div>
       </div>
@@ -41,60 +53,66 @@
 
 <script>
 
+import { mapActions, mapState } from "vuex"
+
 export default {
-  name: 'ChallengeCard',
+  name: "ChallengeCard",
   props: {
     challenge: Object
   },
   data() {
     return {
-      currentProgress: this.challenge.progress
-    }
+      progress: this.challenge.progress
+    };
   },
   methods: {
+    ...mapActions({
+      updateChallengeProgress: "challenges/updateChallengeProgress"
+    }),
     saveProgress() {
-      this.$emit('progress-saved', { challengeId: this.challenge.id, progress: this.currentProgress })
+      this.updateChallengeProgress({challengeId: this.challenge.id, progressValue: this.progress});
     },
     markCompleted() {
-      this.$emit('progress-saved', { challengeId: this.challenge.id, progress: this.challenge.requirement })
+      this.updateChallengeProgress(this.challenge.id, this.challenge.requirement);
     }
   },
   filters: {
     progressDisplay(challenge) {
-      return `${challenge.progress}/${challenge.requirement}`
+      return `${challenge.progress}/${challenge.requirement}`;
     }
   },
   computed: {
+    ...mapState({
+      dataUpdating: "dataUpdating"
+    }),
     isComplete() {
-      return this.challenge.progress == this.challenge.requirement
+      return this.challenge.progress == this.challenge.requirement;
     },
     saveDisabled() {
-      return this.currentProgress == this.challenge.progress
+      return this.progress == this.challenge.progress || this.dataUpdating;
+    },
+    markCompleteDisabled() {
+      return this.isComplete || this.dataUpdating
     },
     progressBarStyle() {
       return {
         width: `${this.challenge.percentCompleted}%`
-      }
+      };
     },
     progressBarColorClass: {
       get() {
         if (this.challenge.percentCompleted == 100) {
-          return 'bg-success'
+          return "bg-success";
         }
         else if (this.challenge.percentCompleted >= 50) {
-          return 'bg-warning'
+          return "bg-warning";
         }
         else {
-          return 'bg-danger'
+          return "bg-danger";
         }
       }
     }
   },
-  watch: {
-    challenge(newChallege) {
-      this.currentProgress = newChallege.progress
-    }
-  }
 }
 
 </script>

@@ -8,6 +8,19 @@ const challenges = {
   mutations: {
     update(state, challenges) {
       state.challenges = challenges
+    },
+    updateChallenge(state, challenge) {
+      let stateChallenge = state.challenges.find(c => c.id == challenge.id)
+      if (!stateChallenge) {
+        return
+      }
+
+      let challengeIndex = state.challenges.indexOf(stateChallenge)
+      if (!(challengeIndex > -1)) {
+        return
+      }
+
+      state.challenges.splice(challengeIndex, 1, challenge)
     }
   },
   actions: {
@@ -22,7 +35,26 @@ const challenges = {
       API.getWeaponChallenges(selectedWeapon.id)
         .then(response => {
           commit('update', response.data)
-          commit('setDataLoading', false, {root: true})
+          commit('setDataLoading', false, { root: true })
+        })
+    },
+    getWeaponChallenge({ commit, rootState }, challengeId) {
+      if (!rootState.dataUpdating) {
+        commit('setDataUpdating', true, { root: true })
+      }
+
+      API.getWeaponChallenge(challengeId)
+        .then(response => {
+          commit('updateChallenge', response.data)
+          commit('setDataUpdating', false, { root: true })
+        })
+    },
+    updateChallengeProgress({ commit, dispatch }, { challengeId, progressValue }) {
+      commit('setDataUpdating', true, { root: true })
+
+      API.updateChallengeProgress(challengeId, progressValue)
+        .then(() => {
+          dispatch('getWeaponChallenge', challengeId)
         })
     }
   }

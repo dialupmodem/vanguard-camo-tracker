@@ -15,11 +15,15 @@ export default new Vuex.Store({
     challenges
   },
   state: {
-    dataLoading: false
+    dataLoading: false,
+    dataUpdating: false
   },
   mutations: {
     setDataLoading(state, isLoading) {
       state.dataLoading = isLoading
+    },
+    setDataUpdating(state, isUpdating) {
+      state.dataUpdating = isUpdating
     }
   }
 })

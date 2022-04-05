@@ -7,9 +7,15 @@
         </div>
         <div class="col pb-5">
           <transition name="fade" mode="out-in">
-            <Spinner v-if="dataLoading" />
-            <WeaponList :key="selectedCategoryId" v-if="!isBrowsingWeapon" />
-            <ChallengeList :key="selectedWeaponId" v-else />
+            <div v-if="dataLoading" :key="dataLoading">
+              <Spinner />
+            </div>
+            <div v-else>
+              <transition name="fade" made="out-in">
+                <WeaponList :key="selectedCategoryId" v-if="!isBrowsingWeapon" />
+                <ChallengeList :key="selectedWeaponId" v-else />
+              </transition>
+            </div>
           </transition>
         </div>
       </div>
