@@ -6,14 +6,8 @@
           <Nav />
         </div>
         <div class="col pb-5">
-          <div class="container-fluid w-100 h-100" v-if="dataLoading">
-            <div class="row h-100 w-100 justify-content-center align-content-center">
-              <div class="col-1">
-                <Spinner />
-              </div>
-            </div>
-          </div>
           <transition name="fade" mode="out-in">
+            <Spinner v-if="dataLoading" />
             <WeaponList :key="selectedCategoryId" v-if="!isBrowsingWeapon" />
             <ChallengeList :key="selectedWeaponId" v-else />
           </transition>
