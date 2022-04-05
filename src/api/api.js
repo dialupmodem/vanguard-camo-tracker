@@ -3,8 +3,8 @@ import axios from 'axios/dist/axios.js'
 let APIUrlBase = process.env.VUE_APP_API_BASE
 
 let GetWeaponCategoriesUrl = `${APIUrlBase}/WeaponCategories`
+let GetWeaponsUrl = `${APIUrlBase}/Weapons`
 let GetWeaponsInCategoryUrl = `${APIUrlBase}/Weapons/FilterByCategory`
-let GetWeaponUrl = `${APIUrlBase}/Weapons`
 let GetWeaponChallengesUrl = `${APIUrlBase}/WeaponChallenges/FilterByWeapon`
 let GetWeaponChallengeUrl = `${APIUrlBase}/WeaponChallenges`
 let UpdateChallengeProgressUrl = `${APIUrlBase}/WeaponChallenges/UpdateProgress`
@@ -14,13 +14,17 @@ export default {
     return axios
       .get(GetWeaponCategoriesUrl)
   },
+  getWeapons() {
+    return axios
+      .get(GetWeaponsUrl)
+  },
   getWeaponsInCategory(categoryId) {
     return axios
       .get(`${GetWeaponsInCategoryUrl}/${categoryId}`)
   },
   getWeapon(weaponId) {
     return axios
-      .get(`${GetWeaponUrl}/${weaponId}`)
+      .get(`${GetWeaponsUrl}/${weaponId}`)
   },
   getWeaponChallenges(weaponId) {
     return axios

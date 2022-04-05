@@ -44,7 +44,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getCategories: 'categories/getCategories'
+      getCategories: 'categories/getCategories',
+      getWeapons: 'weapons/getWeapons'
     }),
     handleProgressSaved(savedChallenge) {
       API.updateChallengeProgress(savedChallenge.challengeId, savedChallenge.progress)
@@ -56,6 +57,7 @@ export default {
 
   created() {
     this.getCategories()
+    this.getWeapons()
   },
   computed: {
     ...mapState({

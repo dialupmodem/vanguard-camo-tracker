@@ -47,13 +47,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      selectedWeapon: 'weapons/selectedWeapon'
+      selectedWeapon: 'weapons/selectedWeapon',
+      weaponsInCategory: 'weapons/weaponsInCategory'
     }),
+    weapons() {
+      return this.weaponsInCategory(this.category.id)
+    },
     collapseId() {
       return `categoryCollapse-${this.category.id}`
-    },
-    weapons() {
-      return this.category.weapons
     },
     bootstrapCollapse() {
       let collapseElement = document.querySelector(`#${this.collapseId}`)

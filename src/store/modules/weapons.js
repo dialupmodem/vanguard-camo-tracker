@@ -13,9 +13,6 @@ const weapons = {
     setSelected(state, weapon) {
       state.weapons.forEach(w => {
         w.selected = w.id == weapon.id
-        if (w.selected) {
-          console.log(w)
-        }
       })
 
     },
@@ -24,23 +21,15 @@ const weapons = {
     }
   },
   actions: {
-    getCategoryWeapons({ commit, rootGetters, rootState }) {
-      let selectedCategory = rootGetters['categories/selectedCategory']
-      if (!selectedCategory) {
-        return
-      }
-
+    getWeapons({commit, rootState}) {
       commit('setDataLoading', true, { root: true })
 
-      API.getWeaponsInCategory(selectedCategory.id)
+      API.getWeapons()
         .then(response => {
           let mappedWeapons = mapWeapons(response.data)
           mappedWeapons = mapWeaponCategoryName(mappedWeapons, rootState.categories.categories)
           commit('update', mappedWeapons)
           commit('setDataLoading', false, { root: true })
-        })
-        .catch((error) => {
-          commit('setDataError', error, { root: true })
         })
     },
     selectWeapon({ commit, dispatch, rootState }, weapon) {
@@ -50,7 +39,7 @@ const weapons = {
         if (weaponCategory.collapsed) {
           commit('categories/toggleCollapsed', weaponCategory, { root: true })
         }
-        dispatch('categories/selectCategory', { category: weaponCategory, weapon: weapon }, { root: true })
+        commit('setSelected', weapon)
       }
 
       dispatch('challenges/getWeaponChallenges', null, { root: true })
@@ -64,6 +53,27 @@ const weapons = {
       }
 
       return selectedWeapon
+    },
+    selectedWeapons(state, getters, rootState, rootGetters) {
+      let selectedCategory = rootGetters['categories/selectedCategory']
+      if (!selectedCategory) {
+        return null
+      }
+
+      let selectedWeapons = state.weapons.filter(w => w.categoryId == selectedCategory.id)
+      if (!selectedWeapons) {
+        return null
+      }
+
+      return selectedWeapons
+    },
+    weaponsInCategory: (state) => (categoryId) => {
+      let categoryWeapons = state.weapons.filter(w => w.categoryId == categoryId)
+      if (!categoryWeapons) {
+        return null
+      }
+      
+      return categoryWeapons
     }
   }
 }

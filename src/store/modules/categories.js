@@ -43,15 +43,9 @@ const categories = {
           context.commit('setDataError', error, { root: true })
         })
     },
-    selectCategory(context, { category, weapon }) {
+    selectCategory(context, category) {
       context.commit('setSelected', category)
       context.commit('weapons/deselectAll', null, { root: true })
-      context.dispatch('weapons/getCategoryWeapons', null, { root: true })
-
-      if (weapon) {
-        console.log(weapon)
-        context.commit('weapons/setSelected', weapon, { root: true })
-      }
     },
     setDefaultCategory(context) {
       if (!context.state.categories) {
