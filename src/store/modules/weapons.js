@@ -26,11 +26,14 @@ const weapons = {
         return
       }
 
+      commit('setDataLoading', true, { root: true })
+
       API.getWeaponsInCategory(selectedCategory.id)
         .then(response => {
           let mappedWeapons = utils.mapWeapons(response.data)
           mappedWeapons = utils.mapWeaponCategoryName(mappedWeapons, rootState.categories.categories)
           commit('update', mappedWeapons)
+          commit('setDataLoading', false, { root: true })
         })
     },
     selectWeapon({ commit, dispatch, rootState }, weapon) {

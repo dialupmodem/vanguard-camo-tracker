@@ -17,8 +17,13 @@ const challenges = {
         return
       }
 
+      commit('setDataLoading', true, { root: true })
+
       API.getWeaponChallenges(selectedWeapon.id)
-        .then(response => commit('update', response.data))
+        .then(response => {
+          commit('update', response.data)
+          commit('setDataLoading', false, {root: true})
+        })
     }
   }
 }

@@ -13,5 +13,13 @@ export default new Vuex.Store({
     categories,
     weapons,
     challenges
+  },
+  state: {
+    dataLoading: false
+  },
+  mutations: {
+    setDataLoading(state, isLoading) {
+      state.dataLoading = isLoading
+    }
   }
 })

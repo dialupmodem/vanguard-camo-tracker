@@ -25,6 +25,8 @@ const categories = {
   },
   actions: {
     getCategories(context) {
+      context.commit('setDataLoading', true, { root: true })
+
       API.getWeaponCategories()
         .then(response => {
           let mappedCategories = utils.mapCategories(response.data)
@@ -34,6 +36,8 @@ const categories = {
           if (!context.getters.selectedCategory) {
             context.dispatch('setDefaultCategory')
           }
+
+          context.commit('setDataLoading', false, { root: true })
         })
     },
     selectCategory(context, category) {
