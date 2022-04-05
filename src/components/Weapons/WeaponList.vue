@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col mt-3">
+      <div class="col mt-3" v-if="selectedCategory">
         <h4>{{ categoryName }}</h4>
         <hr />
       </div>
