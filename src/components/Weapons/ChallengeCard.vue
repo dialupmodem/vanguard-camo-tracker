@@ -15,7 +15,13 @@
         <div class="row justify-content-start">
           <div class="col-12 col-md-1 progress-input-container">
             <label for="progressInput">Current Progress:</label>
-            <input id="progressInput" class="form-control" type="number" v-model="progress" />
+            <input
+              id="progressInput"
+              class="form-control"
+              type="number"
+              v-model="progress"
+              @input="forceValidValue"
+            />
           </div>
           <div class="col-12 col-md-1 mt-3 mt-md-0 align-self-end justify-content-start">
             <button
@@ -70,10 +76,15 @@ export default {
       updateChallengeProgress: "challenges/updateChallengeProgress"
     }),
     saveProgress() {
-      this.updateChallengeProgress({challengeId: this.challenge.id, progressValue: this.progress});
+      this.updateChallengeProgress({ challengeId: this.challenge.id, progressValue: this.progress });
     },
     markCompleted() {
-      this.updateChallengeProgress({challengeId: this.challenge.id, progressValue: this.challenge.requirement});
+      this.updateChallengeProgress({ challengeId: this.challenge.id, progressValue: this.challenge.requirement });
+    },
+    forceValidValue() {
+      if (this.progress > this.challenge.requirement) {
+        this.progress = this.challenge.requirement
+      }
     }
   },
   filters: {
