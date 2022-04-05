@@ -42,7 +42,7 @@
 <script>
 
 export default {
-  name: 'WeaponChallengeCard',
+  name: 'ChallengeCard',
   props: {
     challenge: Object
   },

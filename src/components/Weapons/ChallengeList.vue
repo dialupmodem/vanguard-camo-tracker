@@ -8,7 +8,7 @@
     </div>
     <div class="row row-wrap">
       <div class="col-12">
-        <WeaponChallengeCard
+        <ChallengeCard
           v-for="challenge in challenges"
           :key="challenge.id"
           :challenge="challenge"
@@ -20,12 +20,12 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import WeaponChallengeCard from './WeaponChallengeCard.vue'
+import ChallengeCard from './ChallengeCard.vue'
 
 export default {
-  name: 'WeaponChallengeList',
+  name: 'ChallengeList',
   components: {
-    WeaponChallengeCard
+    ChallengeCard
   },
   computed: {
     ...mapGetters({

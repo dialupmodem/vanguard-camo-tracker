@@ -8,7 +8,7 @@
         <div class="col pb-5">
           <transition name="fade" mode="out-in">
             <WeaponList :key="selectedCategoryId" v-if="!isBrowsingWeapon" />
-            <WeaponChallengeList :key="selectedWeaponId" v-else />
+            <ChallengeList :key="selectedWeaponId" v-else />
           </transition>
         </div>
       </div>
@@ -18,8 +18,8 @@
 
 <script>
 import Nav from './Categories/Nav.vue'
-import WeaponList from './WeaponList.vue'
-import WeaponChallengeList from './WeaponChallengeList.vue'
+import WeaponList from './Weapons/WeaponList.vue'
+import ChallengeList from './Weapons/ChallengeList.vue'
 import API from '/src/api/api.js'
 import {mapActions, mapGetters, mapState} from 'vuex'
 
@@ -28,7 +28,7 @@ export default {
   components: {
     Nav,
     WeaponList,
-    WeaponChallengeList
+    ChallengeList
   },
   methods: {
     ...mapActions({
