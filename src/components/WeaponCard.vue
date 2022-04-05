@@ -21,7 +21,8 @@
   </div>
 </template>
 
-<script>
+<script>import { mapActions } from "vuex"
+
 export default {
   name: 'WeaponCard',
   props: {
@@ -31,8 +32,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      selectWeapon: 'weapons/selectWeapon'
+    }),
     changeSelection() {
-      this.$store.dispatch('selectWeapon', this.weapon)
+      this.selectWeapon(this.weapon)
     },
     getProgressBarClass() {
       let percentage = this.weapon.percentCompleted

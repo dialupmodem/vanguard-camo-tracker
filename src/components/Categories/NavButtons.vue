@@ -5,7 +5,7 @@
         type="button"
         class="nav-link pe-0 ps-0 m-0"
         :class="categoryButtonClass"
-        @click="changeCategory"
+        @click="handleCategoryClick"
       >{{ category.name }}</button>
     </div>
     <div class="col-2 align-self-center">
@@ -14,7 +14,7 @@
         class="category-collapse-button"
         data-bs-toggle="collapse"
         :style="collapseButtonStyle"
-        @click="toggleCollapse"
+        @click="handleCollapseClick"
       >
         <i class="bi-chevron-right"></i>
       </button>
@@ -22,7 +22,8 @@
   </div>
 </template>
 
-<script>
+<script>import { mapActions, mapMutations } from "vuex"
+
 export default {
   name: 'NavButtons',
   props: {
@@ -32,11 +33,17 @@ export default {
     },
   },
   methods: {
-    changeCategory() {
-      this.$store.dispatch('selectCategory', this.category)
+    ...mapActions({
+      selectCategory: 'categories/selectCategory',
+    }),
+    ...mapMutations({
+      toggleCollapsed: 'categories/toggleCollapsed'
+    }),
+    handleCategoryClick() {
+      this.selectCategory(this.category)
     },
-    toggleCollapse() {
-      this.$store.commit('toggleCategoryCollapse', this.category)
+    handleCollapseClick() {
+      this.toggleCollapsed(this.category)
     }
   },
   computed: {

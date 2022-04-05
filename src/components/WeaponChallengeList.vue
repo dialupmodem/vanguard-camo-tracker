@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
 import WeaponChallengeCard from './WeaponChallengeCard.vue'
 
 export default {
@@ -27,11 +28,14 @@ export default {
     WeaponChallengeCard
   },
   computed: {
+    ...mapGetters({
+      selectedWeapon: 'weapons/selectedWeapon'
+    }),
+    ...mapState({ 
+      challenges: state => state.challenges.challenges
+    }),
     weaponName() {
-      return this.$store.getters.selectedWeapon?.name
-    },
-    challenges() {
-      return this.$store.state.challenges
+      return this.selectedWeapon?.name
     }
   }
 }

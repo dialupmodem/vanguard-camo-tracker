@@ -25,6 +25,7 @@
 <script>
 
 import NavItem from './NavItem.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: "Nav",
@@ -32,9 +33,9 @@ export default {
     NavItem
   },
   computed: {
-    categories() {
-      return this.$store.state.categories
-    }
+    ...mapState({
+      categories: state => state.categories.categories
+    })
   }
 }
 </script>

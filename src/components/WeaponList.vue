@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
 import WeaponCard from './WeaponCard.vue'
 
 export default {
@@ -33,11 +34,14 @@ export default {
     WeaponCard
   },
   computed: {
-    weapons() {
-      return this.$store.state.weapons
-    },
+    ...mapState({
+      weapons: state => state.weapons.weapons
+    }),
+    ...mapGetters({
+      selectedCategory: 'categories/selectedCategory'
+    }),
     categoryName() {
-      return this.$store.getters.selectedCategory?.name
+      return this.selectedCategory?.name
     }
   }
 }

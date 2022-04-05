@@ -21,6 +21,7 @@ import Nav from './Categories/Nav.vue'
 import WeaponList from './WeaponList.vue'
 import WeaponChallengeList from './WeaponChallengeList.vue'
 import API from '/src/api/api.js'
+import {mapActions, mapGetters, mapState} from 'vuex'
 
 export default {
   name: 'Home',
@@ -30,36 +31,34 @@ export default {
     WeaponChallengeList
   },
   methods: {
+    ...mapActions({
+      getCategories: 'categories/getCategories'
+    }),
     handleProgressSaved(savedChallenge) {
       API.updateChallengeProgress(savedChallenge.challengeId, savedChallenge.progress)
         .then(() => {
 
         })
     },
-
   },
 
   created() {
-    this.$store.dispatch('getCategories')
+    this.getCategories()
   },
   computed: {
-    categories() {
-      return this.$store.state.categories
-    },
-    selectedCategory() {
-      return this.$store.getters.selectedCategory
-    },
+    ...mapState({
+      categories: state => state.categories.categories,
+      weapons: state => state.weapons.weapons
+    }),
+    ...mapGetters({
+      selectedCategory: 'categories/selectedCategory',
+      selectedWeapon: 'weapons/selectedWeapon'
+    }),
     selectedCategoryId() {
-      return this.selectedCategory ? this.selectedCategory.id : null
-    },
-    weapons() {
-      return this.$store.state.weapons
-    },
-    selectedWeapon() {
-      return this.$store.getters.selectedWeapon
+      return this.selectedCategory?.id
     },
     selectedWeaponId() {
-      return this.selectedWeapon ? this.selectedWeapon.id : null
+      return this.selectedWeapon?.id
     },
     isBrowsingWeapon() {
       return this.weapons.some(w => w.selected)

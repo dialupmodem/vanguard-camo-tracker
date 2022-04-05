@@ -20,6 +20,7 @@
 <script>
 
 import Collapse from 'bootstrap/js/dist/collapse.js'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'WeaponsNavCollapse',
@@ -30,19 +31,24 @@ export default {
     }
   },
   methods: {
+    ...mapActions({ 
+      selectWeapon: 'weapons/selectWeapon'
+    }),
     changeWeapon(weapon) {
-      this.$store.dispatch('selectWeapon', weapon)
+      this.selectWeapon(weapon)
     },
     getLinkClass(weapon) {
-      let selectedWeapon = this.$store.getters.selectedWeapon
-      if (!selectedWeapon) {
+      if (!this.selectedWeapon) {
         return null
       }
 
-      return weapon.id == this.$store.getters.selectedWeapon.id ? 'active' : ''
+      return weapon.id == this.selectedWeapon.id ? 'active' : ''
     }
   },
   computed: {
+    ...mapGetters({
+      selectedWeapon: 'weapons/selectedWeapon'
+    }),
     collapseId() {
       return `categoryCollapse-${this.category.id}`
     },
