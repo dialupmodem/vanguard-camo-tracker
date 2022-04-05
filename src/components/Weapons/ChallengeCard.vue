@@ -73,7 +73,7 @@ export default {
       this.updateChallengeProgress({challengeId: this.challenge.id, progressValue: this.progress});
     },
     markCompleted() {
-      this.updateChallengeProgress(this.challenge.id, this.challenge.requirement);
+      this.updateChallengeProgress({challengeId: this.challenge.id, progressValue: this.challenge.requirement});
     }
   },
   filters: {
