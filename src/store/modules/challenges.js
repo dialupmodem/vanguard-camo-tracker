@@ -1,5 +1,5 @@
-import API from '@/api/api.js'
-import { mapChallenge, mapChallenges } from '@/utils/'
+import { getWeaponChallenges, getWeaponChallenge, updateChallengeProgress } from '@/api'
+import { mapChallenge, mapChallenges } from '@/utils'
 
 const challenges = {
   namespaced: true,
@@ -33,7 +33,7 @@ const challenges = {
     }
   },
   actions: {
-    getWeaponChallenges({ rootGetters, commit }) {
+    getChallenges({ rootGetters, commit }) {
       let selectedWeapon = rootGetters['weapons/selectedWeapon']
       if (!selectedWeapon) {
         return
@@ -41,7 +41,7 @@ const challenges = {
 
       commit('setDataLoading', true, { root: true })
 
-      API.getWeaponChallenges(selectedWeapon.id)
+      getWeaponChallenges(selectedWeapon.id)
         .then(response => {
           let mappedChallenges = mapChallenges(response.data)
 
@@ -60,7 +60,7 @@ const challenges = {
       }
 
 
-      API.getWeaponChallenge(challengeId)
+      getWeaponChallenge(challengeId)
         .then(response => {
           let mappedChallenge = mapChallenge(response.data)
 
@@ -75,7 +75,7 @@ const challenges = {
       let stateChallenge = state.challenges.find(c => c.id == challengeId)
       commit('setUpdating', { challenge: stateChallenge, isUpdating: true })
 
-      API.updateChallengeProgress(challengeId, progressValue)
+      updateChallengeProgress(challengeId, progressValue)
         .then(() => {
           dispatch('getWeaponChallenge', challengeId)
         })

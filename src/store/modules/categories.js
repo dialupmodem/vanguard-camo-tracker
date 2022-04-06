@@ -1,4 +1,4 @@
-import API from '@/api/api.js'
+import { getWeaponCategories } from '@/api'
 import { mapCategories } from '@/utils/'
 
 const categories = {
@@ -27,7 +27,7 @@ const categories = {
     getCategories({ commit, dispatch, getters }) {
       commit('setDataLoading', true, { root: true })
 
-      API.getWeaponCategories()
+      getWeaponCategories()
         .then(response => {
           let mappedCategories = mapCategories(response.data)
 

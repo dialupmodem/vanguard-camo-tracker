@@ -1,5 +1,5 @@
-import API from '@/api/api.js'
-import { deselectAll, mapWeapons, mapWeaponCategoryName } from '@/utils/'
+import { getWeapons as loadWeapons } from '@/api'
+import { deselectAll, mapWeapons, mapWeaponCategoryName } from '@/utils'
 
 const weapons = {
   namespaced: true,
@@ -24,7 +24,7 @@ const weapons = {
     getWeapons({commit, rootState}) {
       commit('setDataLoading', true, { root: true })
 
-      API.getWeapons()
+      loadWeapons()
         .then(response => {
           let mappedWeapons = mapWeapons(response.data)
           mappedWeapons = mapWeaponCategoryName(mappedWeapons, rootState.categories.categories)
@@ -42,7 +42,7 @@ const weapons = {
         commit('setSelected', weapon)
       }
 
-      dispatch('challenges/getWeaponChallenges', null, { root: true })
+      dispatch('challenges/getChallenges', null, { root: true })
     }
   },
   getters: {

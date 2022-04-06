@@ -30,7 +30,6 @@ import WeaponList from './Weapons/WeaponList.vue'
 import ChallengeList from './Weapons/ChallengeList.vue'
 import HomeSpinner from './HomeSpinner.vue'
 import ErrorModal from './ErrorModal.vue'
-import API from '/src/api/api.js'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
@@ -47,12 +46,7 @@ export default {
       getCategories: 'categories/getCategories',
       getWeapons: 'weapons/getWeapons'
     }),
-    handleProgressSaved(savedChallenge) {
-      API.updateChallengeProgress(savedChallenge.challengeId, savedChallenge.progress)
-        .then(() => {
-
-        })
-    },
+    
   },
 
   created() {
