@@ -5,5 +5,6 @@ module.exports = {
         additionalData: `@import "/src/assets/styles/_variables.scss";`
       }
     }
-  }
+  },
+  publicPath: ''
 }
