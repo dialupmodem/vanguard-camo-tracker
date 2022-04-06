@@ -1,10 +1,10 @@
-import { getWeaponChallenges, getWeaponChallenge, updateChallengeProgress } from '@/api'
-import { mapChallenge, mapChallenges } from '@/utils'
+import { loadChallenges, loadChallenge, updateChallengeProgress } from "@/store/helpers"
 
 const challenges = {
   namespaced: true,
   state: () => ({
-    challenges: []
+    challenges: [],
+    dataLoading: false
   }),
   mutations: {
     update(state, challenges) {
@@ -17,6 +17,9 @@ const challenges = {
       }
 
       stateChallenge.updating = isUpdating
+    },
+    setLoading(state, isLoading) {
+      state.dataLoading = isLoading
     },
     updateChallenge(state, challenge) {
       let stateChallenge = state.challenges.find(c => c.id == challenge.id)
@@ -39,18 +42,17 @@ const challenges = {
         return
       }
 
-      commit('setDataLoading', true, { root: true })
-
-      getWeaponChallenges(selectedWeapon.id)
-        .then(response => {
-          let mappedChallenges = mapChallenges(response.data)
-
-          commit('update', mappedChallenges)
-          commit('setDataLoading', false, { root: true })
+      commit('setLoading', true)
+      loadChallenges(selectedWeapon.id)
+        .then(challenges => {
+          commit('update', challenges)
+          commit('setLoading', false)
         })
-        .catch((error) => {
+        .catch(error => {
           commit('setDataError', error, { root: true })
+          commit('setLoading', false)
         })
+
     },
     getWeaponChallenge({ state, commit }, challengeId) {
 
@@ -59,21 +61,23 @@ const challenges = {
         commit('setUpdating', { challenge: stateChallenge, isUpdating: true })
       }
 
-
-      getWeaponChallenge(challengeId)
-        .then(response => {
-          let mappedChallenge = mapChallenge(response.data)
-
-          commit('updateChallenge', mappedChallenge)
+      loadChallenge(challengeId)
+        .then(challenge => {
+          commit('updateChallenge', challenge)
         })
-        .catch((error) => {
+        .catch(error => {
           commit('setDataError', error, { root: true })
         })
     },
     updateChallengeProgress({ state, commit, dispatch }, { challengeId, progressValue }) {
 
       let stateChallenge = state.challenges.find(c => c.id == challengeId)
-      commit('setUpdating', { challenge: stateChallenge, isUpdating: true })
+      let challengeUpdate = {
+        challenge: stateChallenge,
+        isUpdating: true
+      }
+
+      commit('setUpdating', challengeUpdate)
 
       updateChallengeProgress(challengeId, progressValue)
         .then(() => {
@@ -82,6 +86,9 @@ const challenges = {
         })
         .catch((error) => {
           commit('setDataError', error, { root: true })
+
+          challengeUpdate.isUpdating = false
+          commit('setUpdating', challengeUpdate)
         })
     }
   }

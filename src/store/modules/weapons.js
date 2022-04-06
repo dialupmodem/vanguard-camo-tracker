@@ -1,10 +1,10 @@
-import { getWeapons as loadWeapons, getWeapon as loadWeapon } from '@/api'
-import { deselectAll, mapWeapons, mapWeapon, mapWeaponCategoryName } from '@/utils'
+import { loadWeapons, loadWeapon } from '@/store/helpers'
 
 const weapons = {
   namespaced: true,
   state: () => ({
-    weapons: []
+    weapons: [],
+    dataLoading: false
   }),
   mutations: {
     update(state, weapons) {
@@ -25,6 +25,9 @@ const weapons = {
 
       state.weapons.splice(stateWeaponIndex, 1, weapon)
     },
+    setLoading(state, isLoading) {
+      state.dataLoading = isLoading
+    },
     setSelected(state, weapon) {
       state.weapons.forEach(w => {
         w.selected = w.id == weapon.id
@@ -32,28 +35,28 @@ const weapons = {
 
     },
     deselectAll(state) {
-      deselectAll(state.weapons)
+      state.weapons.forEach(w => {
+        w.selected = false
+      })
     }
   },
   actions: {
-    getWeapons({ commit, rootState }) {
-      commit('setDataLoading', true, { root: true })
+    getWeapons({ commit }) {
+      commit('setLoading', true)
 
       loadWeapons()
-        .then(response => {
-          let mappedWeapons = mapWeapons(response.data)
-          mappedWeapons = mapWeaponCategoryName(mappedWeapons, rootState.categories.categories)
-
-          commit('update', mappedWeapons)
-          commit('setDataLoading', false, { root: true })
+        .then(weapons => {
+          commit('update', weapons)
+          commit('setLoading', false)
+        })
+        .catch(error => {
+          commit('setDataError', error, { root: true })
         })
     },
     getWeapon({ commit }, weaponId) {
       loadWeapon(weaponId)
-        .then(response => {
-          let mappedWeapon = mapWeapon(response.data)
-
-          commit('updateWeapon', mappedWeapon)
+        .then(weapon => {
+          commit('updateWeapon', weapon)
         })
     },
     selectWeapon({ commit, dispatch, rootState }, weapon) {
@@ -63,10 +66,12 @@ const weapons = {
         if (weaponCategory.collapsed) {
           commit('categories/toggleCollapsed', weaponCategory, { root: true })
         }
+
         commit('setSelected', weapon)
+        dispatch('challenges/getChallenges', null, { root: true })
       }
 
-      dispatch('challenges/getChallenges', null, { root: true })
+      
     }
   },
   getters: {

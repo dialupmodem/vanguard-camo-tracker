@@ -1,14 +1,26 @@
-import { getWeaponCategories } from '@/api'
-import { mapCategories } from '@/utils/'
+import { loadCategories } from '@/store//helpers'
 
 const categories = {
   namespaced: true,
   state: () => ({
-    categories: []
+    categories: [],
+    dataLoading: false
   }),
   mutations: {
     update(state, categories) {
       state.categories = categories
+
+      let selectedCategory = state.categories.find(c => c.selected)
+      
+      if (!selectedCategory) {
+        if (state.categories) {
+          let defaultCategory = state.categories[0]
+          defaultCategory.selected = true
+        }
+      }
+    },
+    setLoading(state, isLoading) {
+      state.dataLoading = isLoading
     },
     setSelected(state, category) {
       state.categories.forEach(c => {
@@ -24,38 +36,23 @@ const categories = {
     }
   },
   actions: {
-    getCategories({ commit, dispatch, getters }) {
-      commit('setDataLoading', true, { root: true })
+    getCategories({ commit }) {
+      commit('setLoading', true)
 
-      getWeaponCategories()
-        .then(response => {
-          let mappedCategories = mapCategories(response.data)
-
-          commit('update', mappedCategories)
-
-          if (!getters.selectedCategory) {
-            dispatch('setDefaultCategory')
-          }
-
-          commit('setDataLoading', false, { root: true })
+      loadCategories()
+        .then(categories => {
+          commit('update', categories)
+          commit('setLoading', false)
         })
-        .catch((error) => {
+        .catch(error => {
           commit('setDataError', error, { root: true })
+          commit('setLoading', false)
         })
     },
     selectCategory({ commit }, category) {
       commit('setSelected', category)
       commit('weapons/deselectAll', null, { root: true })
     },
-    setDefaultCategory({ state, dispatch }) {
-      if (!state.categories) {
-        return
-      }
-
-      let defaultCategory = state.categories[0]
-      dispatch('selectCategory', defaultCategory)
-    },
-
   },
   getters: {
     selectedCategory(state) {
