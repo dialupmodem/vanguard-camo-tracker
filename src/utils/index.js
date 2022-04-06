@@ -15,6 +15,12 @@ function mapWeapons(weaponsResponse) {
     }
   ))
 }
+function mapWeapon(weaponResponse) {
+  return {
+    ...weaponResponse,
+    selected: false
+  }
+}
 function mapWeaponCategoryName(weapons, categories) {
   return weapons.map(w => (
     {
@@ -75,6 +81,7 @@ function mapError(error) {
 export {
   mapCategories,
   mapWeapons,
+  mapWeapon,
   mapWeaponCategoryName,
   mapChallenges,
   mapChallenge,

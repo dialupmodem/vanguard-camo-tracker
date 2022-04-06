@@ -78,6 +78,7 @@ const challenges = {
       updateChallengeProgress(challengeId, progressValue)
         .then(() => {
           dispatch('getWeaponChallenge', challengeId)
+          dispatch('weapons/getWeapon', stateChallenge.weaponId, { root: true })
         })
         .catch((error) => {
           commit('setDataError', error, { root: true })
