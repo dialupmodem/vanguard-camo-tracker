@@ -26,13 +26,9 @@ export default new Vuex.Store({
     setDataLoading(state, isLoading) {
       state.dataLoading = isLoading
     },
-    setDataUpdating(state, isUpdating) {
-      state.dataUpdating = isUpdating
-    },
     setDataError(state, error) {
       state.dataError = mapError(error)
       state.dataLoading = false
-      state.dataUpdating = false
     },
     clearDataError(state) {
       state.dataError = {
