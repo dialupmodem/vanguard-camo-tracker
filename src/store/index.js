@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import categories from './modules/categories.js'
 import weapons from './modules/weapons.js'
 import challenges from './modules/challenges.js'
-import { mapError } from '@/utils/utils.js'
+import { mapError } from '@/utils/'
 
 Vue.use(Vuex)
 

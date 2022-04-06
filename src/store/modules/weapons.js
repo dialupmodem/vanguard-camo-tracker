@@ -1,5 +1,5 @@
 import API from '@/api/api.js'
-import { deselectAll, mapWeapons, mapWeaponCategoryName } from '@/utils/utils'
+import { deselectAll, mapWeapons, mapWeaponCategoryName } from '@/utils/'
 
 const weapons = {
   namespaced: true,

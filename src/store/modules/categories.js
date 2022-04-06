@@ -1,5 +1,5 @@
 import API from '@/api/api.js'
-import { mapCategories } from '@/utils/utils'
+import { mapCategories } from '@/utils/'
 
 const categories = {
   namespaced: true,

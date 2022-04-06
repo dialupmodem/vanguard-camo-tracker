@@ -1,68 +1,84 @@
-export default {
-
-  mapCategories(categoriesResponse) {
-    return categoriesResponse.map(c => (
-      {
-        ...c,
-        selected: false,
-        collapsed: true
-      }
-    ))
-  },
-  mapWeapons(weaponsResponse) {
-    return weaponsResponse.map(w => (
-      {
-        ...w,
-        selected: false,
-      }
-    ))
-  },
-  mapWeaponCategoryName(weapons, categories) {
-    return weapons.map(w => (
-      {
-        ...w,
-        categoryName: () => {
-          let categoryName = this.getWeaponCategoryName(w, categories)
-          if (!categoryName) {
-            return null
-          }
-
-          return categoryName
-        }
-      }
-    ))
-  },
-  getWeaponCategoryName(weapon, categories) {
-    let category = categories.find(c => c.id == weapon.categoryId)
-    return category
-  },
-  deselectAll(objectArray) {
-    objectArray.forEach(o => {
-      o.selected = false
-    })
-  },
-  getErrorMessage(error) {
-    if (!error) {
-      return 'Unspecified Error'
+function mapCategories(categoriesResponse) {
+  return categoriesResponse.map(c => (
+    {
+      ...c,
+      selected: false,
+      collapsed: true
     }
-
-    console.log(error)
-    window.error = error
-
-    if (error.response) {
-      return `${error.response.data} ${error.response.status} ${error.response.headers}`
+  ))
+}
+function mapWeapons(weaponsResponse) {
+  return weaponsResponse.map(w => (
+    {
+      ...w,
+      selected: false
     }
-    else if (error.message) {
-      return `${error.message}`
+  ))
+}
+function mapWeaponCategoryName(weapons, categories) {
+  return weapons.map(w => (
+    {
+      ...w,
+      categoryName: getWeaponCategoryName(w, categories)
     }
-    else {
-      return 'Unspecified Error'
+  ))
+}
+function mapChallenges(challengesResponse) {
+  return challengesResponse.map(c => (
+    {
+      ...c,
+      updating: false
     }
-  },
-  mapError(error) {
-    return {
-      isError: true,
-      message: this.getErrorMessage(error)
-    }
+  ))
+}
+function mapChallenge(challengeResponse) {
+  return {
+    ...challengeResponse,
+    updating: false
   }
+}
+function getWeaponCategoryName(weapon, categories) {
+  let category = categories.find(c => c.id == weapon.categoryId)
+  if (!category) {
+    return null
+  }
+
+  return category.name
+}
+function deselectAll(objectArray) {
+  objectArray.forEach(o => {
+    o.selected = false
+  })
+}
+function getErrorMessage(error) {
+  if (!error) {
+    return 'Unspecified Error'
+  }
+
+  if (error.response) {
+    return `${error.response.data} ${error.response.status} ${error.response.headers}`
+  }
+  else if (error.message) {
+    return `${error.message}`
+  }
+  else {
+    return 'Unspecified Error'
+  }
+}
+function mapError(error) {
+  return {
+    isError: true,
+    message: getErrorMessage(error)
+  }
+}
+
+export {
+  mapCategories,
+  mapWeapons,
+  mapWeaponCategoryName,
+  mapChallenges,
+  mapChallenge,
+  getWeaponCategoryName,
+  deselectAll,
+  mapError
 }

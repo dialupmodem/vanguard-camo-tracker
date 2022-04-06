@@ -1,5 +1,5 @@
 import API from '@/api/api.js'
-import { mapChallenge, mapChallenges } from '@/utils/utils'
+import { mapChallenge, mapChallenges } from '@/utils/'
 
 const challenges = {
   namespaced: true,
