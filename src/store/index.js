@@ -17,7 +17,6 @@ export default new Vuex.Store({
   },
   state: {
     dataLoading: false,
-    dataUpdating: false,
     dataError: {
       isError: false,
       message: null

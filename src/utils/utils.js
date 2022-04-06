@@ -23,6 +23,20 @@ function mapWeaponCategoryName(weapons, categories) {
     }
   ))
 }
+function mapChallenges(challengesResponse) {
+  return challengesResponse.map(c => (
+    {
+      ...c,
+      updating: false
+    }
+  ))
+}
+function mapChallenge(challengeResponse) {
+  return {
+    ...challengeResponse,
+    updating: false
+  }
+}
 function getWeaponCategoryName(weapon, categories) {
   let category = categories.find(c => c.id == weapon.categoryId)
   if (!category) {
@@ -62,6 +76,8 @@ export {
   mapCategories,
   mapWeapons,
   mapWeaponCategoryName,
+  mapChallenges,
+  mapChallenge,
   getWeaponCategoryName,
   deselectAll,
   mapError

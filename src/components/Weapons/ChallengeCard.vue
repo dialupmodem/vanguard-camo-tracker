@@ -31,7 +31,7 @@
               style="min-width: 62px; min-height: 28px;"
               @click="saveProgress"
             >
-              <div class="spinner-border spinner-border-sm" v-if="dataUpdating">
+              <div class="spinner-border spinner-border-sm" v-if="isUpdating">
                 <span class="visually-hidden">Saving...</span>
               </div>
               <span v-else>Save</span>
@@ -45,7 +45,7 @@
               style="min-width: 143px; min-height: 38px;"
               @click="markCompleted"
             >
-              <div class="spinner-border spinner-border-sm" v-if="dataUpdating">
+              <div class="spinner-border spinner-border-sm" v-if="isUpdating">
                 <span class="visually-hidden">Saving...</span>
               </div>
               <span v-else>Mark Completed</span>
@@ -59,7 +59,7 @@
 
 <script>
 
-import { mapActions, mapState } from "vuex"
+import { mapActions } from "vuex"
 
 export default {
   name: "ChallengeCard",
@@ -93,9 +93,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      dataUpdating: "dataUpdating"
-    }),
     isComplete() {
       return this.challenge.progress == this.challenge.requirement;
     },
@@ -103,7 +100,10 @@ export default {
       return this.progress == this.challenge.progress || this.dataUpdating;
     },
     markCompleteDisabled() {
-      return this.isComplete || this.dataUpdating
+      return this.isComplete || this.challenge.updating
+    },
+    isUpdating() {
+      return this.challenge.updating
     },
     progressBarStyle() {
       return {
@@ -124,6 +124,13 @@ export default {
       }
     }
   },
+  watch: {
+    'challenge.progress': {
+      handler(newVal) {
+        this.progress = newVal
+      }
+    }
+  }
 }
 
 </script>
