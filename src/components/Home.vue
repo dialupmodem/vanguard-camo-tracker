@@ -7,15 +7,8 @@
         </div>
         <div class="col pb-5">
           <transition name="fade" mode="out-in">
-            <div v-if="dataLoading" :key="dataLoading">
-              <HomeSpinner />
-            </div>
-            <div v-else>
-              <transition name="fade" made="out-in">
-                <WeaponList :key="selectedCategoryId" v-if="!isBrowsingWeapon" />
-                <ChallengeList :key="selectedWeaponId" v-else />
-              </transition>
-            </div>
+            <WeaponList :key="selectedCategoryId" v-if="!selectedWeapon" />
+            <ChallengeList :key="selectedWeaponId" v-else />
           </transition>
         </div>
       </div>
@@ -28,7 +21,6 @@
 import Nav from './Categories/Nav.vue'
 import WeaponList from './Weapons/WeaponList.vue'
 import ChallengeList from './Weapons/ChallengeList.vue'
-import HomeSpinner from './HomeSpinner.vue'
 import ErrorModal from './ErrorModal.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
@@ -38,7 +30,6 @@ export default {
     Nav,
     WeaponList,
     ChallengeList,
-    HomeSpinner,
     ErrorModal
   },
   methods: {
@@ -48,7 +39,6 @@ export default {
     }),
     
   },
-
   created() {
     this.getCategories()
     this.getWeapons()
@@ -57,11 +47,11 @@ export default {
     ...mapState({
       categories: state => state.categories.categories,
       weapons: state => state.weapons.weapons,
-      dataLoading: state => state.dataLoading
     }),
     ...mapGetters({
       selectedCategory: 'categories/selectedCategory',
-      selectedWeapon: 'weapons/selectedWeapon'
+      selectedWeapon: 'weapons/selectedWeapon',
+      dataLoading: 'dataLoading'
     }),
     selectedCategoryId() {
       return this.selectedCategory?.id

@@ -35,7 +35,8 @@ export default new Vuex.Store({
   },
   getters: {
     dataLoading(state) {
-      return state.categories.dataLoading || state.weapons.dataloading || state.challenges.dataloading
+      let isLoading = state.categories.dataLoading || state.weapons.dataLoading || state.challenges.dataLoading
+      return isLoading
     }
   }
 })

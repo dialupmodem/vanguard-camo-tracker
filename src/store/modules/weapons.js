@@ -66,7 +66,9 @@ const weapons = {
         if (weaponCategory.collapsed) {
           commit('categories/toggleCollapsed', weaponCategory, { root: true })
         }
-
+        if (!weaponCategory.selected) {
+          commit('categories/setSelected', weaponCategory, { root: true })
+        }
         commit('setSelected', weapon)
         dispatch('challenges/getChallenges', null, { root: true })
       }
