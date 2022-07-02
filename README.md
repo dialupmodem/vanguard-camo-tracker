@@ -12,11 +12,6 @@ The application has a listing of weapons divided into their respective category 
 ## Configuration
 The value of `VUE_APP_API_BASE` is used to configure the base url for API requests. It should be pointed to where the API is hosted.
 
-## Demo
-See it in action [here](https://camotracker.dialup-modem.info/). 
-
-Due to the single-user nature this is a 'demo' version. Data saved here should reflect on the application though no data is permanently written. Some workarounds were necessary to make this happen so there may be some odd behavior here and there.
-
 ## Project setup
 ```
 yarn install
